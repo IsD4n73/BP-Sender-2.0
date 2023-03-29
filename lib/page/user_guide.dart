@@ -14,7 +14,7 @@ class _UserGuidePageState extends State<UserGuidePage> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10),
-      child: SfPdfViewer.network(),
+      child: SfPdfViewer.network(AppUrls.pdfUserGuide),
     );
   }
 }
