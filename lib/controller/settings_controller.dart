@@ -1,4 +1,4 @@
-import 'package:buste_paga_sender/common/settings_model.dart';
+import 'package:buste_paga_sender/model/settings_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // get the saved settings

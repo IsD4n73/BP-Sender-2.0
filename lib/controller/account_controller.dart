@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../common/account_model.dart';
+import '../model/account_model.dart';
 
 // get the saved email and password
 Future<AccountModel> getSavedAccount() async {
