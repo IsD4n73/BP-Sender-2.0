@@ -21,4 +21,5 @@ Invia email ad una mail list con allegati, corpo della mail in html, oggetto per
   http: ^0.13.5
   bot_toast: ^4.0.3
   file_picker: ^5.2.6
+  syncfusion_flutter_pdfviewer: ^21.1.37
 ```
