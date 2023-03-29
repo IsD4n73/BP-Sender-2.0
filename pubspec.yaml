@@ -42,6 +42,7 @@ dependencies:
   mailer: ^6.0.0
   http: ^0.13.5
   bot_toast: ^4.0.3
+  file_picker: ^5.2.6
 
 dev_dependencies:
   flutter_test:

@@ -36,10 +36,10 @@ String getName(String nomeFile) {
   }
 }
 
-Future<List<String>> getAllFileInDirectory() async {
+Future<List<String>> getAllFileInDirectory(String path) async {
   List<String> files = [];
 
-  var dir = Directory("C:/Users/dante.davidde/Desktop/buste/").listSync();
+  var dir = Directory(path).listSync();
 
   for (var file in dir) {
     if (p.basename(file.path).contains(".pdf")) {

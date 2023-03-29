@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 
@@ -111,7 +109,7 @@ void showFileError() {
   );
 }
 
-void showFileSaved() {
+void showFileSaved(String dir) {
   BotToast.showCustomNotification(
     useSafeArea: true,
     duration: const Duration(seconds: 4),
@@ -123,7 +121,7 @@ void showFileSaved() {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Icon(Icons.check_circle),
-            Text("File salvato correttamente in ${Directory.current.path}"),
+            Text("File salvato correttamente in $dir"),
           ],
         ),
       );

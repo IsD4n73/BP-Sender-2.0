@@ -2,10 +2,10 @@ import 'package:buste_paga_sender/controller/files_controller.dart';
 import 'package:buste_paga_sender/controller/mail_list_controller.dart';
 import 'package:buste_paga_sender/page/sender.dart';
 
-Future<void> sendEmails() async {
+Future<void> sendEmails(String dir) async {
   logController.text = "\n======== INIZIO ========\n\n";
 
-  List<String> dirFiles = await getAllFileInDirectory();
+  List<String> dirFiles = await getAllFileInDirectory(dir);
   Map<String, String> email = await getMailListAsMap();
 
   for (var file in dirFiles) {
@@ -22,6 +22,11 @@ Future<void> sendEmails() async {
     }
 
     // todo send email
+  }
+
+  if (dirFiles.isEmpty) {
+    logController.text +=
+        "\n\nNESSUN FILE TROVATO DA CUI ESTRARRE LE INFORMAZIONI";
   }
 
   logController.text += "\n\n======== FINE ========";

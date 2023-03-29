@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:buste_paga_sender/common/smtp_configuration.dart';
 import 'package:buste_paga_sender/controller/account_controller.dart';
 import 'package:buste_paga_sender/controller/sender_controller.dart';
+import 'package:buste_paga_sender/controller/settings_controller.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 import '../common/alerts.dart';
@@ -16,6 +18,8 @@ class SenderPage extends StatefulWidget {
 }
 
 class _SenderPageState extends State<SenderPage> {
+  String dir = Directory.current.path;
+
   @override
   void initState() {
     super.initState();
@@ -42,7 +46,20 @@ class _SenderPageState extends State<SenderPage> {
           const SizedBox(height: 25),
           ElevatedButton(
             onPressed: () async {
-              await sendEmails();
+              var settings = await getSavedSettings();
+              if (!settings.takeExeDir) {
+                dir = await FilePicker.platform.getDirectoryPath(
+                      dialogTitle: "Seleziona la cartella dove sono i file",
+                    ) ??
+                    "NULL";
+                if (dir != "NULL") {
+                  await sendEmails(dir);
+                  setState(() {});
+                }
+              } else {
+                await sendEmails(dir);
+                setState(() {});
+              }
             },
             style: ElevatedButton.styleFrom(
               minimumSize: Size(MediaQuery.of(context).size.width / 2, 40),
@@ -67,13 +84,33 @@ class _SenderPageState extends State<SenderPage> {
                   ? null
                   : () async {
                       DateTime currentDate = DateTime.now();
-                      try {
-                        final File file = File(
-                            '${Directory.current.path}/log-${currentDate.day}-${currentDate.month}-${currentDate.year}-${currentDate.second}.txt');
-                        await file.writeAsString(logController.text);
-                        showFileSaved();
-                      } catch (_) {
-                        showFileError();
+
+                      var settings = await getSavedSettings();
+                      if (!settings.takeExeDir) {
+                        dir = await FilePicker.platform.getDirectoryPath(
+                              dialogTitle:
+                                  "Seleziona la cartella dove sono i file",
+                            ) ??
+                            "NULL";
+                        if (dir != "NULL") {
+                          try {
+                            final File file = File(
+                                '$dir/log-${currentDate.day}-${currentDate.month}-${currentDate.year}-${currentDate.second}.txt');
+                            await file.writeAsString(logController.text);
+                            showFileSaved(dir);
+                          } catch (_) {
+                            showFileError();
+                          }
+                        }
+                      } else {
+                        try {
+                          final File file = File(
+                              '$dir/log-${currentDate.day}-${currentDate.month}-${currentDate.year}-${currentDate.second}.txt');
+                          await file.writeAsString(logController.text);
+                          showFileSaved(dir);
+                        } catch (_) {
+                          showFileError();
+                        }
                       }
                     },
               child: const Text("Salva Log"),
