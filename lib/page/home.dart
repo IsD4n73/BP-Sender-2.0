@@ -2,6 +2,7 @@ import 'package:buste_paga_sender/page/account.dart';
 import 'package:buste_paga_sender/page/mail_list.dart';
 import 'package:buste_paga_sender/page/sender.dart';
 import 'package:buste_paga_sender/page/settings.dart';
+import 'package:buste_paga_sender/page/user_guide.dart';
 import 'package:flutter/material.dart';
 import 'package:side_navigation/side_navigation.dart';
 
@@ -18,6 +19,7 @@ class _HomePageState extends State<HomePage> {
     AccountPage(),
     MailListPage(),
     SettingsPage(),
+    UserGuidePage(),
   ];
 
   int selectedIndex = 0;
@@ -55,6 +57,10 @@ class _HomePageState extends State<HomePage> {
               SideNavigationBarItem(
                 icon: Icons.settings,
                 label: 'Impostazioni',
+              ),
+              SideNavigationBarItem(
+                icon: Icons.help,
+                label: 'Guida Utente',
               ),
             ],
             onTap: (index) {
