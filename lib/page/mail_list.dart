@@ -57,10 +57,10 @@ class _MailListPageState extends State<MailListPage> {
                 });
               }
             },
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Cerca',
-              prefixIcon: Icon(Icons.search),
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: 'Cerca (${mailList.length})',
+              prefixIcon: const Icon(Icons.search),
             ),
           ),
         ),

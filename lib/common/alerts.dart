@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 
@@ -79,6 +81,49 @@ void showSettingsSaved() {
           children: const [
             Icon(Icons.check_circle),
             Text("Impostazioni salvate correttamente"),
+          ],
+        ),
+      );
+    },
+  );
+}
+
+/// [FILE ALERT] ///
+void showFileError() {
+  BotToast.showCustomNotification(
+    useSafeArea: true,
+    duration: const Duration(seconds: 4),
+    toastBuilder: (cancelFunc) {
+      return Card(
+        elevation: 5,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: const [
+            Icon(Icons.error),
+            Text(
+              "Non è possibile salvare il log, riprova",
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
+void showFileSaved() {
+  BotToast.showCustomNotification(
+    useSafeArea: true,
+    duration: const Duration(seconds: 4),
+    toastBuilder: (cancelFunc) {
+      return Card(
+        elevation: 5,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Icon(Icons.check_circle),
+            Text("File salvato correttamente in ${Directory.current.path}"),
           ],
         ),
       );

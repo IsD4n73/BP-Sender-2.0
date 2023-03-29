@@ -1,6 +1,7 @@
 import '../common/urls.dart';
 import '../model/maillist_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
 
 //get the mail list as list
 Future<List<MailListModel>> getMailList() async {
@@ -28,7 +29,7 @@ Future<List<MailListModel>> getMailList() async {
 
 //get the mail list as map
 Future<Map<String, String>> getMailListAsMap() async {
-  Map<String, String> list = {};
+  final Map<String, String> list = {};
 
   final response = await http.get(Uri.parse(AppUrls.csvFile));
 
@@ -36,7 +37,12 @@ Future<Map<String, String>> getMailListAsMap() async {
     var listEmail = response.body.replaceAll("", "").split('\n');
 
     for (var persona in listEmail) {
-      list[persona.split(";")[0]] = persona.split(";")[1];
+      try {
+        var tmp = persona.split(";");
+        list[tmp[0].toUpperCase()] = tmp[1].trim();
+      } on RangeError {
+        debugPrint("out of range");
+      }
     }
   }
   return list;
