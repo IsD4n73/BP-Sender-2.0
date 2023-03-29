@@ -1,4 +1,4 @@
-import 'package:buste_paga_sender/home.dart';
+import 'package:buste_paga_sender/page/home.dart';
 import 'package:flutter/material.dart';
 
 void main() {

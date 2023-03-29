@@ -1,0 +1,73 @@
+import 'package:buste_paga_sender/page/account.dart';
+import 'package:buste_paga_sender/page/mail_list.dart';
+import 'package:buste_paga_sender/page/sender.dart';
+import 'package:buste_paga_sender/page/settings.dart';
+import 'package:flutter/material.dart';
+import 'package:side_navigation/side_navigation.dart';
+
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  List<Widget> views = const [
+    SenderPage(),
+    AccountPage(),
+    MailListPage(),
+    SettingsPage(),
+  ];
+
+  int selectedIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Row(
+        children: [
+          SideNavigationBar(
+            selectedIndex: selectedIndex,
+            expandable: false,
+            initiallyExpanded: true,
+            header: SideNavigationBarHeader(
+              image: CircleAvatar(
+                child: Image.asset("assets/logo.png"),
+              ),
+              title: const Text('3EM'),
+              subtitle: const Text('Engineering'),
+            ),
+            footer: const SideNavigationBarFooter(label: Text('3em.it')),
+            items: const [
+              SideNavigationBarItem(
+                icon: Icons.dashboard,
+                label: 'Home',
+              ),
+              SideNavigationBarItem(
+                icon: Icons.person,
+                label: 'Account',
+              ),
+              SideNavigationBarItem(
+                icon: Icons.email_rounded,
+                label: 'Mail List',
+              ),
+              SideNavigationBarItem(
+                icon: Icons.settings,
+                label: 'Impostazioni',
+              ),
+            ],
+            onTap: (index) {
+              setState(() {
+                selectedIndex = index;
+              });
+            },
+          ),
+          Expanded(
+            child: views.elementAt(selectedIndex),
+          )
+        ],
+      ),
+    );
+  }
+}
