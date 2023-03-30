@@ -31,7 +31,8 @@ Future<void> sendEmails(String dir) async {
 
     if (email[nome] != null) {
       logController.text += "\n[INFO] ==> L'email trovata e: ${email[nome]}\n";
-      sendError = await sendMail(email[nome]!, oggetto, nome); // send email
+      sendError =
+          await sendMail(email[nome]!, oggetto, nome, dir, file); // send email
     } else {
       logController.text +=
           "\n[INFO-ERRORE] ==> L'email trovata e: ${email[nome]}\n";
@@ -55,7 +56,8 @@ Future<void> sendEmails(String dir) async {
   logController.text += "\n\n======== FINE ========";
 }
 
-Future<bool> sendMail(String email, String oggetto, String nome) async {
+Future<bool> sendMail(
+    String email, String oggetto, String nome, String dir, String file) async {
   AccountModel account = await getSavedAccount();
 
   if (account.email != null && account.password != null) {
@@ -63,7 +65,12 @@ Future<bool> sendMail(String email, String oggetto, String nome) async {
       ..from = Address(account.email!)
       ..recipients.add(email)
       ..subject = oggetto
-      ..html = AppConfig.msg;
+      ..html = AppConfig.msg
+      ..attachments = [
+        FileAttachment(
+          File("$dir\\$file"),
+        )..location = Location.attachment,
+      ];
 
     try {
       await send(

@@ -33,7 +33,7 @@ class _SenderPageState extends State<SenderPage> {
         child: Column(
           children: [
             const Text(
-              "Invio Buste Paga",
+              "Invio Email",
               style: TextStyle(fontSize: 32),
             ),
             const SizedBox(height: 25),
@@ -57,7 +57,10 @@ class _SenderPageState extends State<SenderPage> {
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(MediaQuery.of(context).size.width / 2, 40),
               ),
-              child: const Text("Invia"),
+              child: const Text(
+                "Invia",
+                style: TextStyle(fontSize: 16),
+              ),
             ),
             const SizedBox(height: 25),
             TextField(
