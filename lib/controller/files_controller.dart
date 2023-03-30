@@ -40,10 +40,12 @@ Future<List<String>> getAllFileInDirectory(String path) async {
   List<String> files = [];
 
   var dir = Directory(path).listSync();
-
+  logController.text += "\n\n======== FILE TROVATI ========\n";
   for (var file in dir) {
     if (p.basename(file.path).contains(".pdf")) {
       files.add(p.basename(file.path));
+      logController.text +=
+          "[INFO] ==> File trovato: ${p.basename(file.path)}\n";
     }
   }
   return files;

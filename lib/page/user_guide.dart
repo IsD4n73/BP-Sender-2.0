@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
+import '../common/urls.dart';
+
 class UserGuidePage extends StatefulWidget {
   const UserGuidePage({Key? key}) : super(key: key);
 
@@ -9,7 +11,6 @@ class UserGuidePage extends StatefulWidget {
 }
 
 class _UserGuidePageState extends State<UserGuidePage> {
-
   @override
   Widget build(BuildContext context) {
     return Padding(
