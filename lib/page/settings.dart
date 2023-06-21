@@ -11,7 +11,6 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   TextEditingController prefixController = TextEditingController();
-  bool takeExeDir = true;
 
   @override
   void initState() {
@@ -20,7 +19,6 @@ class _SettingsPageState extends State<SettingsPage> {
     getSavedSettings().then((value) {
       setState(() {
         prefixController.text = value.prefisso;
-        takeExeDir = value.takeExeDir;
       });
     });
   }
@@ -45,22 +43,10 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ),
           const SizedBox(height: 20),
-          CheckboxListTile(
-            title: const Text("Cerca i file nella stessa cartella dell EXE"),
-            value: takeExeDir,
-            onChanged: (newValue) {
-              setState(() {
-                takeExeDir = newValue ?? true;
-              });
-            },
-            controlAffinity:
-                ListTileControlAffinity.leading, //  <-- leading Checkbox
-          ),
-          const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () async {
               if (prefixController.text.isNotEmpty) {
-                await saveSettings(prefixController.text, takeExeDir);
+                await saveSettings(prefixController.text);
                 showSettingsSaved();
               } else {
                 showSettingsError();

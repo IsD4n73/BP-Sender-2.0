@@ -78,7 +78,7 @@ Future<bool> sendMail(
         SmtpServer(
           AppConfig.host,
           password: account.password!,
-          username: account.email!,
+          username: account.user!,
           port: AppConfig.port,
           allowInsecure: true,
           ignoreBadCertificate: true,

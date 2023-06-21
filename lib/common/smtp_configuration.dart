@@ -2,8 +2,6 @@ class AppConfig {
   static String host = "authsmtp.3em.it";
   static int port = 25;
 
-  static String prefix = "";
-
   static String msg = """Ciao,\r\nInvio in allegato buste paga  come in oggetto.
 
 \r\nTi prego di provvedere alla compilazione del solito Form per le attestazioni di spese non documentate per l&#39;importo che trovi sotto la voce &#147;Rimborso spese pi&egrave; di lista&#147; in busta paga.

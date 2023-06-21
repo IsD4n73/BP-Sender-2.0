@@ -7,15 +7,15 @@ void showAccountError() {
     useSafeArea: true,
     duration: const Duration(seconds: 4),
     toastBuilder: (cancelFunc) {
-      return Card(
+      return const Card(
         elevation: 5,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
+          children: [
             Icon(Icons.error),
             Text(
-                "Non è possibile salvare l'account, controlla email e password"),
+                "Non è possibile salvare l'account, controlla username e password"),
           ],
         ),
       );
@@ -28,12 +28,12 @@ void showAccountSaved() {
     useSafeArea: true,
     duration: const Duration(seconds: 4),
     toastBuilder: (cancelFunc) {
-      return Card(
+      return const Card(
         elevation: 5,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
+          children: [
             Icon(Icons.check_circle),
             Text("Account salvato correttamente"),
           ],
@@ -49,12 +49,12 @@ void showSettingsError() {
     useSafeArea: true,
     duration: const Duration(seconds: 4),
     toastBuilder: (cancelFunc) {
-      return Card(
+      return const Card(
         elevation: 5,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
+          children: [
             Icon(Icons.error),
             Text(
               "Non è possibile salvare le impostazioni, riprova",
@@ -71,12 +71,12 @@ void showSettingsSaved() {
     useSafeArea: true,
     duration: const Duration(seconds: 4),
     toastBuilder: (cancelFunc) {
-      return Card(
+      return const Card(
         elevation: 5,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
+          children: [
             Icon(Icons.check_circle),
             Text("Impostazioni salvate correttamente"),
           ],
@@ -92,12 +92,12 @@ void showFileError() {
     useSafeArea: true,
     duration: const Duration(seconds: 4),
     toastBuilder: (cancelFunc) {
-      return Card(
+      return const Card(
         elevation: 5,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
+          children: [
             Icon(Icons.error),
             Text(
               "Non è possibile salvare il log, riprova",

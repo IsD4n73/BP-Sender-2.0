@@ -12,6 +12,7 @@ class AccountPage extends StatefulWidget {
 class _AccountPageState extends State<AccountPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController pswController = TextEditingController();
+  TextEditingController userController = TextEditingController();
 
   @override
   void initState() {
@@ -22,6 +23,7 @@ class _AccountPageState extends State<AccountPage> {
       setState(() {
         emailController.text = value.email ?? "";
         pswController.text = value.password ?? "";
+        userController.text = value.user ?? "";
       });
     });
   }
@@ -49,11 +51,19 @@ class _AccountPageState extends State<AccountPage> {
             ),
             const SizedBox(height: 20),
             TextField(
+              controller: userController,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Username SMTP',
+              ),
+            ),
+            const SizedBox(height: 20),
+            TextField(
               controller: pswController,
               obscureText: true,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: 'Password',
+                labelText: 'Password SMTP',
               ),
             ),
             const SizedBox(height: 20),
@@ -61,8 +71,10 @@ class _AccountPageState extends State<AccountPage> {
               onPressed: () async {
                 if (emailController.text.length > 3 &&
                     emailController.text.contains("@") &&
-                    pswController.text.isNotEmpty) {
-                  await saveAccount(emailController.text, pswController.text);
+                    pswController.text.isNotEmpty &&
+                    userController.text.isNotEmpty) {
+                  await saveAccount(emailController.text, pswController.text,
+                      userController.text);
                   showAccountSaved();
                 } else {
                   showAccountError();
