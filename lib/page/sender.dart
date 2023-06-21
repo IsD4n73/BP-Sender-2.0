@@ -3,6 +3,7 @@ import 'package:buste_paga_sender/controller/sender_controller.dart';
 import 'package:buste_paga_sender/controller/settings_controller.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:windows_taskbar/windows_taskbar.dart';
 
 import '../common/alerts.dart';
 
@@ -39,6 +40,8 @@ class _SenderPageState extends State<SenderPage> {
             const SizedBox(height: 25),
             ElevatedButton(
               onPressed: () async {
+                WindowsTaskbar.setProgressMode(
+                    TaskbarProgressMode.indeterminate);
                 var settings = await getSavedSettings();
                 if (!settings.takeExeDir) {
                   dir = await FilePicker.platform.getDirectoryPath(
@@ -53,6 +56,7 @@ class _SenderPageState extends State<SenderPage> {
                   await sendEmails(dir);
                   setState(() {});
                 }
+                WindowsTaskbar.setProgressMode(TaskbarProgressMode.noProgress);
               },
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(MediaQuery.of(context).size.width / 2, 40),
