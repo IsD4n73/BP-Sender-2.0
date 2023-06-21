@@ -66,6 +66,29 @@ void showSettingsError() {
   );
 }
 
+/// [THEME SETTINGS] \\\
+void showThemeAlert() {
+  BotToast.showCustomNotification(
+    useSafeArea: true,
+    duration: const Duration(seconds: 4),
+    toastBuilder: (cancelFunc) {
+      return const Card(
+        elevation: 5,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(Icons.error),
+            Text(
+              "Per applicare il tema riavvia il software",
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
 void showSettingsSaved() {
   BotToast.showCustomNotification(
     useSafeArea: true,

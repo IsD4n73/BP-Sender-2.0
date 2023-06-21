@@ -11,10 +11,18 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   TextEditingController prefixController = TextEditingController();
+  String selectedTheme = "system";
 
   @override
   void initState() {
     super.initState();
+
+    getSavedTheme().then((value) {
+      setState(() {
+        print(value);
+        selectedTheme = value;
+      });
+    });
 
     getSavedSettings().then((value) {
       setState(() {
@@ -26,35 +34,72 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text(
-            "Impostazioni",
-            style: TextStyle(fontSize: 32),
-          ),
-          const SizedBox(height: 25),
-          TextField(
-            controller: prefixController,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Prefisso Oggetto Email',
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              "Impostazioni",
+              style: TextStyle(fontSize: 32),
             ),
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () async {
-              if (prefixController.text.isNotEmpty) {
-                await saveSettings(prefixController.text);
-                showSettingsSaved();
-              } else {
-                showSettingsError();
-              }
-            },
-            child: const Text("Salva Impostazioni"),
-          ),
-        ],
+            const SizedBox(height: 25),
+            TextField(
+              controller: prefixController,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Prefisso Oggetto Email',
+              ),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("Tema Software: "),
+                DropdownButton(
+                  value: selectedTheme,
+                  items: const [
+                    DropdownMenuItem(
+                      value: "light",
+                      child: Text("Light"),
+                    ),
+                    DropdownMenuItem(
+                      value: "dark",
+                      child: Text("Dark"),
+                    ),
+                    DropdownMenuItem(
+                      value: "system",
+                      child: Text("Sistema"),
+                    ),
+                  ],
+                  hint: const Text("Seleziona Tema"),
+                  onChanged: (value) async {
+                    await saveTheme(value!);
+
+                    setState(() {
+                      selectedTheme = value;
+                    });
+                    showThemeAlert();
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () async {
+                await saveTheme(selectedTheme);
+                if (prefixController.text.isNotEmpty) {
+                  await saveSettings(prefixController.text);
+                  showSettingsSaved();
+                } else {
+                  showSettingsError();
+                }
+              },
+              child: const Text("Salva Impostazioni"),
+            ),
+          ],
+        ),
       ),
     );
   }

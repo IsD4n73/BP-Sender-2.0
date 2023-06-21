@@ -15,8 +15,22 @@ Future<SettingsModel> getSavedSettings() async {
   return settings;
 }
 
+// get the saved theme
+Future<String> getSavedTheme() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final String theme = prefs.getString('bp-theme') ?? "system";
+
+  return theme;
+}
+
 // save settings
 Future<void> saveSettings(String prefix) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.setString('bp-objprefix', prefix);
+}
+
+// save theme
+Future<void> saveTheme(String theme) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString('bp-theme', theme);
 }
