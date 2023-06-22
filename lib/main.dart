@@ -4,6 +4,7 @@ import 'package:buste_paga_sender/page/home.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
+  await getSavedMailText();
   String theme = await getSavedTheme();
   ThemeMode selectedTheme = ThemeMode.system;
 
@@ -34,8 +35,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      darkTheme:
-          ThemeData(primarySwatch: Colors.blue, brightness: Brightness.dark),
+      darkTheme: ThemeData(
+        primarySwatch: Colors.blue,
+        brightness: Brightness.dark,
+      ),
       builder: BotToastInit(), //1. call BotToastInit
       navigatorObservers: [BotToastNavigatorObserver()],
       home: const HomePage(),

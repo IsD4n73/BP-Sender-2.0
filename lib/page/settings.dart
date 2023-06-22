@@ -1,4 +1,5 @@
 import 'package:buste_paga_sender/common/alerts.dart';
+import 'package:buste_paga_sender/common/smtp_configuration.dart';
 import 'package:buste_paga_sender/controller/settings_controller.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +12,7 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   TextEditingController prefixController = TextEditingController();
+  TextEditingController msgController = TextEditingController();
   String selectedTheme = "system";
 
   @override
@@ -19,7 +21,6 @@ class _SettingsPageState extends State<SettingsPage> {
 
     getSavedTheme().then((value) {
       setState(() {
-        print(value);
         selectedTheme = value;
       });
     });
@@ -27,6 +28,12 @@ class _SettingsPageState extends State<SettingsPage> {
     getSavedSettings().then((value) {
       setState(() {
         prefixController.text = value.prefisso;
+      });
+    });
+
+    getSavedMailText().then((_) {
+      setState(() {
+        msgController.text = AppConfig.msg.replaceAll("<br>", "\n");
       });
     });
   }
@@ -85,10 +92,24 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ],
             ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: msgController,
+              maxLines: '\n'.allMatches(msgController.text).length + 1,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Corpo Email (HTML)',
+              ),
+            ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
                 await saveTheme(selectedTheme);
+
+                if (msgController.text.isNotEmpty) {
+                  await saveMailText(msgController.text);
+                }
+
                 if (prefixController.text.isNotEmpty) {
                   await saveSettings(prefixController.text);
                   showSettingsSaved();
