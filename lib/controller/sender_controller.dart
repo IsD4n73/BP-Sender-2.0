@@ -59,18 +59,26 @@ Future<void> sendEmails(String dir) async {
 Future<bool> sendMail(
     String email, String oggetto, String nome, String dir, String file) async {
   AccountModel account = await getSavedAccount();
+  List<Attachment>? attachmentFile;
+
+  if (await File("$dir\\$file").exists()) {
+    attachmentFile = [
+      FileAttachment(
+        File("$dir\\$file"),
+      )..location = Location.attachment,
+    ];
+  }
 
   if (account.email != null && account.password != null) {
     final message = Message()
       ..from = Address(account.email!)
       ..recipients.add(email)
       ..subject = oggetto
-      ..html = AppConfig.msg
-      ..attachments = [
-        FileAttachment(
-          File("$dir\\$file"),
-        )..location = Location.attachment,
-      ];
+      ..html = AppConfig.msg;
+
+    if (attachmentFile != null) {
+      message.attachments = attachmentFile;
+    }
 
     try {
       await send(

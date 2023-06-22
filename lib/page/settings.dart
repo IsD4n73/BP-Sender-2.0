@@ -12,8 +12,10 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   TextEditingController prefixController = TextEditingController();
+  TextEditingController separatorController = TextEditingController();
   TextEditingController msgController = TextEditingController();
   String selectedTheme = "system";
+  bool advanceSettingsVisible = false;
 
   @override
   void initState() {
@@ -22,6 +24,12 @@ class _SettingsPageState extends State<SettingsPage> {
     getSavedTheme().then((value) {
       setState(() {
         selectedTheme = value;
+      });
+    });
+
+    getSavedSeparator().then((value) {
+      setState(() {
+        separatorController.text = value;
       });
     });
 
@@ -93,12 +101,39 @@ class _SettingsPageState extends State<SettingsPage> {
               ],
             ),
             const SizedBox(height: 10),
-            TextField(
-              controller: msgController,
-              maxLines: '\n'.allMatches(msgController.text).length + 1,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Corpo Email (HTML)',
+            CheckboxListTile(
+              title: const Text("Mostra Impostazioni Avanzate"),
+              value: advanceSettingsVisible,
+              onChanged: (newValue) {
+                setState(() {
+                  advanceSettingsVisible = newValue!;
+                });
+              },
+              activeColor: Colors.blue,
+            ),
+            Visibility(
+              visible: advanceSettingsVisible,
+              child: Column(
+                children: [
+                  const SizedBox(height: 10),
+                  TextField(
+                    controller: separatorController,
+                    maxLength: 1,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Separatore (** - Mese - Cognome Nome)',
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    controller: msgController,
+                    maxLines: '\n'.allMatches(msgController.text).length + 1,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Corpo Email (HTML)',
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 20),
@@ -108,6 +143,10 @@ class _SettingsPageState extends State<SettingsPage> {
 
                 if (msgController.text.isNotEmpty) {
                   await saveMailText(msgController.text);
+                }
+
+                if (separatorController.text.isNotEmpty) {
+                  await saveSeparator(separatorController.text);
                 }
 
                 if (prefixController.text.isNotEmpty) {

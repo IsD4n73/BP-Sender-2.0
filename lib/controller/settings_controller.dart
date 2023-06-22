@@ -25,6 +25,17 @@ Future<String> getSavedTheme() async {
   return theme;
 }
 
+// get the saved separator
+Future<String> getSavedSeparator() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final String symbol =
+      prefs.getString('bp-separator') ?? AppConfig.splitSymbol;
+
+  AppConfig.splitSymbol = symbol;
+
+  return symbol;
+}
+
 // get the saved mail text
 Future<void> getSavedMailText() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -39,6 +50,12 @@ Future<void> getSavedMailText() async {
 Future<void> saveSettings(String prefix) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.setString('bp-objprefix', prefix);
+}
+
+// save separator
+Future<void> saveSeparator(String symbol) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString('bp-separator', symbol);
 }
 
 // save theme

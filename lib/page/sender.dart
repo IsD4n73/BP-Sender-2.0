@@ -24,6 +24,7 @@ class _SenderPageState extends State<SenderPage> {
   @override
   void initState() {
     super.initState();
+    getSavedSeparator();
   }
 
   @override

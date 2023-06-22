@@ -2,6 +2,10 @@ class AppConfig {
   static String host = "authsmtp.3em.it";
   static int port = 25;
 
+  static int oggettoIndex = 1;
+  static int nameIndex = 2;
+  static String splitSymbol = "-";
+
   static String msg = """Ciao,
 Invio in allegato buste paga  come in oggetto.
 
