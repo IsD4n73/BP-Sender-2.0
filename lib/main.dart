@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 void main() async {
   await getSavedMailText();
-  await getSavedSeparator();
+  await getSavedAdvanced();
 
   String theme = await getSavedTheme();
   ThemeMode selectedTheme = ThemeMode.system;

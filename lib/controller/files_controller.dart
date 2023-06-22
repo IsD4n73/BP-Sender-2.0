@@ -39,7 +39,7 @@ String getName(String nomeFile) {
     return "N/D";
   } on RangeError {
     logController.text =
-        "${logController.text}\n[ERRORE] ==> Il nome trovato e: NULL";
+        "${logController.text}\n[ERRORE] ==> Il nome trovato e: NULL (out of range)";
     return "N/D";
   }
 }

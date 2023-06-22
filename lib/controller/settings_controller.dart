@@ -26,14 +26,17 @@ Future<String> getSavedTheme() async {
 }
 
 // get the saved separator
-Future<String> getSavedSeparator() async {
+Future<void> getSavedAdvanced() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  final String symbol =
+
+  AppConfig.splitSymbol =
       prefs.getString('bp-separator') ?? AppConfig.splitSymbol;
+  AppConfig.oggettoIndex =
+      prefs.getInt('bp-objIndex') ?? AppConfig.oggettoIndex;
+  AppConfig.nameIndex = prefs.getInt('bp-nameIndex') ?? AppConfig.nameIndex;
+  AppConfig.datiCount = prefs.getInt('bp-datiCount') ?? AppConfig.datiCount;
 
-  AppConfig.splitSymbol = symbol;
-
-  return symbol;
+  AppConfig.sendFile = prefs.getBool('bp-sendFile') ?? AppConfig.sendFile;
 }
 
 // get the saved mail text
@@ -42,20 +45,72 @@ Future<void> getSavedMailText() async {
   final String mailtext = prefs.getString('bp-mailtext') ?? AppConfig.msg;
 
   AppConfig.msg = mailtext;
-
-  //return mailtext;
 }
 
 // save settings
 Future<void> saveSettings(String prefix) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.setString('bp-objprefix', prefix);
+  AppConfig.splitSymbol =
+      prefs.getString('bp-separator') ?? AppConfig.splitSymbol;
+  AppConfig.oggettoIndex =
+      prefs.getInt('bp-objIndex') ?? AppConfig.oggettoIndex;
+  AppConfig.nameIndex = prefs.getInt('bp-nameIndex') ?? AppConfig.nameIndex;
+  AppConfig.datiCount = prefs.getInt('bp-datiCount') ?? AppConfig.datiCount;
+}
+
+// save name
+Future<void> saveName(int name) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setInt('bp-nameIndex', name - 1);
+  AppConfig.splitSymbol =
+      prefs.getString('bp-separator') ?? AppConfig.splitSymbol;
+  AppConfig.oggettoIndex =
+      prefs.getInt('bp-objIndex') ?? AppConfig.oggettoIndex;
+  AppConfig.nameIndex = prefs.getInt('bp-nameIndex') ?? AppConfig.nameIndex;
+  AppConfig.datiCount = prefs.getInt('bp-datiCount') ?? AppConfig.datiCount;
+}
+
+// save dati
+Future<void> saveDati(int dati) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setInt('bp-datiCount', dati);
+  AppConfig.splitSymbol =
+      prefs.getString('bp-separator') ?? AppConfig.splitSymbol;
+  AppConfig.oggettoIndex =
+      prefs.getInt('bp-objIndex') ?? AppConfig.oggettoIndex;
+  AppConfig.nameIndex = prefs.getInt('bp-nameIndex') ?? AppConfig.nameIndex;
+  AppConfig.datiCount = prefs.getInt('bp-datiCount') ?? AppConfig.datiCount;
+}
+
+// save obj
+Future<void> saveObj(int obj) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setInt('bp-objIndex', obj - 1);
+  AppConfig.splitSymbol =
+      prefs.getString('bp-separator') ?? AppConfig.splitSymbol;
+  AppConfig.oggettoIndex =
+      prefs.getInt('bp-objIndex') ?? AppConfig.oggettoIndex;
+  AppConfig.nameIndex = prefs.getInt('bp-nameIndex') ?? AppConfig.nameIndex;
+  AppConfig.datiCount = prefs.getInt('bp-datiCount') ?? AppConfig.datiCount;
 }
 
 // save separator
 Future<void> saveSeparator(String symbol) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.setString('bp-separator', symbol);
+  AppConfig.splitSymbol =
+      prefs.getString('bp-separator') ?? AppConfig.splitSymbol;
+  AppConfig.oggettoIndex =
+      prefs.getInt('bp-objIndex') ?? AppConfig.oggettoIndex;
+  AppConfig.nameIndex = prefs.getInt('bp-nameIndex') ?? AppConfig.nameIndex;
+  AppConfig.datiCount = prefs.getInt('bp-datiCount') ?? AppConfig.datiCount;
+}
+
+// save send file
+Future<void> saveSendFile(bool file) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setBool('bp-sendFile', file);
 }
 
 // save theme
@@ -68,4 +123,18 @@ Future<void> saveTheme(String theme) async {
 Future<void> saveMailText(String mailText) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.setString('bp-mailtext', mailText.replaceAll("\n", "<br>"));
+}
+
+List<String> generateExampleList() {
+  return List<String>.generate(AppConfig.datiCount, (index) {
+    if (index == (AppConfig.nameIndex)) {
+      return "Cognome Nome";
+    }
+
+    if (index == (AppConfig.oggettoIndex)) {
+      return "Oggetto";
+    }
+
+    return "AAA";
+  });
 }

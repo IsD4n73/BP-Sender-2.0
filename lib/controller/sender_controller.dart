@@ -76,7 +76,7 @@ Future<bool> sendMail(
       ..subject = oggetto
       ..html = AppConfig.msg;
 
-    if (attachmentFile != null) {
+    if (attachmentFile != null && AppConfig.sendFile) {
       message.attachments = attachmentFile;
     }
 

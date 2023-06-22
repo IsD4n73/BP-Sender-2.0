@@ -4,6 +4,10 @@ class AppConfig {
 
   static int oggettoIndex = 1;
   static int nameIndex = 2;
+  static int datiCount = 3;
+
+  static bool sendFile = true;
+
   static String splitSymbol = "-";
 
   static String msg = """Ciao,

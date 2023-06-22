@@ -1,6 +1,7 @@
 import 'package:buste_paga_sender/common/alerts.dart';
 import 'package:buste_paga_sender/common/smtp_configuration.dart';
 import 'package:buste_paga_sender/controller/settings_controller.dart';
+import 'package:buste_paga_sender/page/settings_advanced.dart';
 import 'package:flutter/material.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -12,8 +13,8 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   TextEditingController prefixController = TextEditingController();
-  TextEditingController separatorController = TextEditingController();
   TextEditingController msgController = TextEditingController();
+
   String selectedTheme = "system";
   bool advanceSettingsVisible = false;
 
@@ -24,12 +25,6 @@ class _SettingsPageState extends State<SettingsPage> {
     getSavedTheme().then((value) {
       setState(() {
         selectedTheme = value;
-      });
-    });
-
-    getSavedSeparator().then((value) {
-      setState(() {
-        separatorController.text = value;
       });
     });
 
@@ -101,6 +96,15 @@ class _SettingsPageState extends State<SettingsPage> {
               ],
             ),
             const SizedBox(height: 10),
+            TextField(
+              controller: msgController,
+              maxLines: '\n'.allMatches(msgController.text).length + 1,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Corpo Email (HTML)',
+              ),
+            ),
+            const SizedBox(height: 10),
             CheckboxListTile(
               title: const Text("Mostra Impostazioni Avanzate"),
               value: advanceSettingsVisible,
@@ -111,31 +115,7 @@ class _SettingsPageState extends State<SettingsPage> {
               },
               activeColor: Colors.blue,
             ),
-            Visibility(
-              visible: advanceSettingsVisible,
-              child: Column(
-                children: [
-                  const SizedBox(height: 10),
-                  TextField(
-                    controller: separatorController,
-                    maxLength: 1,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Separatore (** - Mese - Cognome Nome)',
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  TextField(
-                    controller: msgController,
-                    maxLines: '\n'.allMatches(msgController.text).length + 1,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Corpo Email (HTML)',
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            SettingsAdvanced(advanceSettingsVisible),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
@@ -143,10 +123,6 @@ class _SettingsPageState extends State<SettingsPage> {
 
                 if (msgController.text.isNotEmpty) {
                   await saveMailText(msgController.text);
-                }
-
-                if (separatorController.text.isNotEmpty) {
-                  await saveSeparator(separatorController.text);
                 }
 
                 if (prefixController.text.isNotEmpty) {

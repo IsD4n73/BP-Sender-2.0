@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:windows_taskbar/windows_taskbar.dart';
 
 import '../common/alerts.dart';
+import '../common/smtp_configuration.dart';
 
 TextEditingController logController = TextEditingController();
 TextEditingController sendController = TextEditingController();
@@ -20,11 +21,16 @@ class SenderPage extends StatefulWidget {
 
 class _SenderPageState extends State<SenderPage> {
   String dir = Directory.current.path;
+  List<String> listData = [];
 
   @override
   void initState() {
     super.initState();
-    getSavedSeparator();
+    getSavedAdvanced().then((value) {
+      setState(() {
+        listData = generateExampleList();
+      });
+    });
   }
 
   @override
@@ -38,6 +44,8 @@ class _SenderPageState extends State<SenderPage> {
               "Invio Email",
               style: TextStyle(fontSize: 32),
             ),
+            Text(
+                "${listData.join(AppConfig.splitSymbol)}.pdf ${AppConfig.sendFile == false ? "(Il file non verrà allegato)" : ""}"),
             const SizedBox(height: 25),
             ElevatedButton(
               onPressed: () async {
