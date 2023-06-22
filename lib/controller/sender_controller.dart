@@ -95,7 +95,7 @@ Future<bool> sendMail(
       logController.text += "[INVIO] ==> Email inviata a $email ($nome)\n";
       sendController.text += "$nome\n";
       return false;
-    } on MailerException catch (e) {
+    } on MailerException {
       logController.text += "[ERRORE] ==> Email non inviata a $email ($nome)\n";
       return true;
     }
