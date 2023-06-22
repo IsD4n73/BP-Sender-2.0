@@ -98,7 +98,7 @@ class _SenderPageState extends State<SenderPage> {
                         if (!settings.takeExeDir) {
                           dir = await FilePicker.platform.getDirectoryPath(
                                 dialogTitle:
-                                    "Seleziona la cartella dove sono i file",
+                                    "Seleziona la cartella dove salvare il file",
                               ) ??
                               "NULL";
                           if (dir != "NULL") {

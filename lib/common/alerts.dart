@@ -123,7 +123,7 @@ void showFileError() {
           children: [
             Icon(Icons.error),
             Text(
-              "Non è possibile salvare il log, riprova",
+              "Non è possibile salvare il file, riprova",
             ),
           ],
         ),

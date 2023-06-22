@@ -5,8 +5,8 @@ import '../common/smtp_configuration.dart';
 import '../controller/settings_controller.dart';
 
 class SettingsAdvanced extends StatefulWidget {
-  bool isVisible;
-  SettingsAdvanced(this.isVisible, {super.key});
+  final bool isVisible;
+  const SettingsAdvanced(this.isVisible, {super.key});
 
   @override
   State<SettingsAdvanced> createState() => _SettingsAdvancedState();

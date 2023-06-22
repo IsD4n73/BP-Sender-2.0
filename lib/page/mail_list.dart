@@ -1,6 +1,11 @@
+import 'dart:io';
+
+import 'package:bot_toast/bot_toast.dart';
 import 'package:buste_paga_sender/controller/mail_list_controller.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
+import '../common/alerts.dart';
 import '../model/maillist_model.dart';
 
 class MailListPage extends StatefulWidget {
@@ -31,6 +36,43 @@ class _MailListPageState extends State<MailListPage> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: Row(
+            children: [
+              ElevatedButton.icon(
+                onPressed: () async {
+                  var dir = await FilePicker.platform.getDirectoryPath(
+                        dialogTitle:
+                            "Seleziona la cartella dove salvare il file",
+                      ) ??
+                      "NULL";
+                  if (dir != "NULL") {
+                    var cancel = BotToast.showLoading();
+                    try {
+                      final File file = File('$dir/emails-3EM.csv');
+                      String csv = "";
+                      mailList.toList().forEach((element) async {
+                        csv += "${element.nome};${element.email}\n";
+                      });
+                      await file.writeAsString(csv);
+                      showFileSaved(dir);
+                    } catch (_) {
+                      showFileError();
+                    }
+                    cancel();
+                  } else {
+                    showFileError();
+                  }
+                },
+                icon: const Icon(Icons.download),
+                label: const Text(
+                  "Scarica le email",
+                ),
+              )
+            ],
+          ),
+        ),
         Padding(
           padding: const EdgeInsets.all(10),
           child: TextField(
