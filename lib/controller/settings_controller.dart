@@ -25,7 +25,7 @@ Future<String> getSavedTheme() async {
   return theme;
 }
 
-// get the saved separator
+// get the saved advanced settings
 Future<void> getSavedAdvanced() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -37,6 +37,8 @@ Future<void> getSavedAdvanced() async {
   AppConfig.datiCount = prefs.getInt('bp-datiCount') ?? AppConfig.datiCount;
 
   AppConfig.sendFile = prefs.getBool('bp-sendFile') ?? AppConfig.sendFile;
+  AppConfig.searchOggetto =
+      prefs.getBool('bp-searchOggetto') ?? AppConfig.searchOggetto;
 }
 
 // get the saved mail text
@@ -113,6 +115,13 @@ Future<void> saveSendFile(bool file) async {
   await prefs.setBool('bp-sendFile', file);
 }
 
+// save search oggetto
+Future<void> saveSearchOggetto(bool obj) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setBool('bp-searchOggetto', obj);
+  await getSavedAdvanced();
+}
+
 // save theme
 Future<void> saveTheme(String theme) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -126,12 +135,12 @@ Future<void> saveMailText(String mailText) async {
 }
 
 List<String> generateExampleList() {
+  print(AppConfig.searchOggetto);
   return List<String>.generate(AppConfig.datiCount, (index) {
     if (index == (AppConfig.nameIndex)) {
       return "Cognome Nome";
     }
-
-    if (index == (AppConfig.oggettoIndex)) {
+    if (AppConfig.searchOggetto && index == AppConfig.oggettoIndex) {
       return "Oggetto";
     }
 

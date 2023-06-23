@@ -18,6 +18,7 @@ class _SettingsAdvancedState extends State<SettingsAdvanced> {
   TextEditingController nameController = TextEditingController();
   TextEditingController datiController = TextEditingController();
   bool sendFile = true;
+  bool searchOggetto = true;
 
   List<String> listData = ["nome", "oggetto"];
 
@@ -30,6 +31,7 @@ class _SettingsAdvancedState extends State<SettingsAdvanced> {
         objController.text = (AppConfig.oggettoIndex + 1).toString();
         nameController.text = (AppConfig.nameIndex + 1).toString();
         sendFile = AppConfig.sendFile;
+        searchOggetto = AppConfig.searchOggetto;
 
         listData = generateExampleList();
       });
@@ -45,6 +47,7 @@ class _SettingsAdvancedState extends State<SettingsAdvanced> {
       child: Column(
         children: [
           const SizedBox(height: 10),
+          const Divider(),
           CheckboxListTile(
             title: const Text("Allega File"),
             subtitle: const Text("Includi il file nella mail"),
@@ -58,6 +61,22 @@ class _SettingsAdvancedState extends State<SettingsAdvanced> {
             activeColor: Colors.blue,
           ),
           const SizedBox(height: 10),
+          CheckboxListTile(
+            title: const Text("Cerca Oggetto"),
+            subtitle: const Text(
+                "Cerca nel file anche l'oggetto da inserire dopo il prefisso"),
+            value: searchOggetto,
+            onChanged: (newValue) async {
+              await saveSearchOggetto(newValue!).then((value) {
+                setState(() {
+                  searchOggetto = newValue;
+                  listData = generateExampleList();
+                });
+              });
+            },
+            activeColor: Colors.blue,
+          ),
+          const SizedBox(height: 15),
           TextField(
             controller: separatorController,
             maxLength: 1,
@@ -107,6 +126,7 @@ class _SettingsAdvancedState extends State<SettingsAdvanced> {
                     TextField(
                       controller: objController,
                       maxLength: 1,
+                      enabled: searchOggetto,
                       onChanged: (value) async {
                         if (objController.text.isNotEmpty) {
                           await saveObj(int.parse(objController.text));

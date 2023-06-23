@@ -7,6 +7,7 @@ class AppConfig {
   static int datiCount = 3;
 
   static bool sendFile = true;
+  static bool searchOggetto = true;
 
   static String splitSymbol = "-";
 

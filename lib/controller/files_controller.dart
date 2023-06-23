@@ -12,6 +12,10 @@ Future<String> getOggetto(String nomeFile) async {
 
   SettingsModel prefix = await getSavedSettings();
 
+  if (!AppConfig.searchOggetto) {
+    return prefix.prefisso;
+  }
+
   try {
     return "${prefix.prefisso} ${oggetto[AppConfig.oggettoIndex]}";
   } on Exception {
