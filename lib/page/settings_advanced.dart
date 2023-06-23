@@ -14,6 +14,7 @@ class SettingsAdvanced extends StatefulWidget {
 
 class _SettingsAdvancedState extends State<SettingsAdvanced> {
   TextEditingController separatorController = TextEditingController();
+  TextEditingController extensionController = TextEditingController();
   TextEditingController objController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController datiController = TextEditingController();
@@ -30,6 +31,7 @@ class _SettingsAdvancedState extends State<SettingsAdvanced> {
         datiController.text = AppConfig.datiCount.toString();
         objController.text = (AppConfig.oggettoIndex + 1).toString();
         nameController.text = (AppConfig.nameIndex + 1).toString();
+        extensionController.text = AppConfig.fileExtension;
         sendFile = AppConfig.sendFile;
         searchOggetto = AppConfig.searchOggetto;
 
@@ -78,21 +80,38 @@ class _SettingsAdvancedState extends State<SettingsAdvanced> {
           ),
           const SizedBox(height: 15),
           TextField(
+            controller: extensionController,
+            maxLength: 3,
+            onChanged: (value) async {
+              if (extensionController.text.isNotEmpty) {
+                await saveExtension(extensionController.text);
+                setState(() {
+                  listData = generateExampleList();
+                });
+              }
+            },
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Estensione File',
+              prefixText: ".",
+            ),
+          ),
+          const SizedBox(height: 15),
+          TextField(
             controller: separatorController,
             maxLength: 1,
             onChanged: (value) async {
               if (separatorController.text.isNotEmpty) {
                 await saveSeparator(separatorController.text);
+                setState(() {
+                  listData = generateExampleList();
+                });
               }
             },
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
               labelText: 'Separatore (** - Mese - Cognome Nome)',
             ),
-            keyboardType: TextInputType.number,
-            inputFormatters: [
-              FilteringTextInputFormatter.digitsOnly,
-            ],
           ),
           const SizedBox(height: 15),
           TextField(
@@ -179,7 +198,8 @@ class _SettingsAdvancedState extends State<SettingsAdvanced> {
             ],
           ),
           const SizedBox(height: 10),
-          Text("${listData.join(AppConfig.splitSymbol)}.pdf"),
+          Text(
+              "${listData.join(AppConfig.splitSymbol)}.${AppConfig.fileExtension}"),
         ],
       ),
     );

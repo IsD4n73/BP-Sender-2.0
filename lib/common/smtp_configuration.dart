@@ -10,6 +10,7 @@ class AppConfig {
   static bool searchOggetto = true;
 
   static String splitSymbol = "-";
+  static String fileExtension = "pdf";
 
   static String msg = """Ciao,
 Invio in allegato buste paga  come in oggetto.

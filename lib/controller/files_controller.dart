@@ -29,7 +29,8 @@ String getName(String nomeFile) {
   List<String> name = nomeFile.split(AppConfig.splitSymbol);
 
   try {
-    String nome = name[AppConfig.nameIndex].replaceAll(".pdf", "");
+    String nome =
+        name[AppConfig.nameIndex].replaceAll(".${AppConfig.fileExtension}", "");
     nome = nome.trim().toUpperCase();
     nome = nome.replaceAll("[^\\p{ASCII}]", "");
     nome = nome.replaceAll("\\p{M}", "");
@@ -54,7 +55,7 @@ Future<List<String>> getAllFileInDirectory(String path) async {
   var dir = Directory(path).listSync();
   logController.text += "\n\n======== FILE TROVATI ========\n";
   for (var file in dir) {
-    if (p.basename(file.path).contains(".pdf")) {
+    if (p.basename(file.path).contains(".${AppConfig.fileExtension}")) {
       files.add(p.basename(file.path));
       logController.text +=
           "[INFO] ==> File trovato: ${p.basename(file.path)}\n";

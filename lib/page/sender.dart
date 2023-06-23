@@ -45,7 +45,7 @@ class _SenderPageState extends State<SenderPage> {
               style: TextStyle(fontSize: 32),
             ),
             Text(
-                "${listData.join(AppConfig.splitSymbol)}.pdf ${AppConfig.sendFile == false ? "(Il file non verrà allegato)" : ""}"),
+                "${listData.join(AppConfig.splitSymbol)}.${AppConfig.fileExtension} ${AppConfig.sendFile == false ? "(Il file non verrà allegato)" : ""}"),
             const SizedBox(height: 25),
             ElevatedButton(
               onPressed: () async {

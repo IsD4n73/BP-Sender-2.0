@@ -31,6 +31,9 @@ Future<void> getSavedAdvanced() async {
 
   AppConfig.splitSymbol =
       prefs.getString('bp-separator') ?? AppConfig.splitSymbol;
+  AppConfig.fileExtension =
+      prefs.getString('bp-fileExtension') ?? AppConfig.fileExtension;
+
   AppConfig.oggettoIndex =
       prefs.getInt('bp-objIndex') ?? AppConfig.oggettoIndex;
   AppConfig.nameIndex = prefs.getInt('bp-nameIndex') ?? AppConfig.nameIndex;
@@ -109,6 +112,13 @@ Future<void> saveSeparator(String symbol) async {
   AppConfig.datiCount = prefs.getInt('bp-datiCount') ?? AppConfig.datiCount;
 }
 
+// save extension
+Future<void> saveExtension(String extension) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString('bp-fileExtension', extension);
+  await getSavedAdvanced();
+}
+
 // save send file
 Future<void> saveSendFile(bool file) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -134,8 +144,8 @@ Future<void> saveMailText(String mailText) async {
   await prefs.setString('bp-mailtext', mailText.replaceAll("\n", "<br>"));
 }
 
+// generate example list
 List<String> generateExampleList() {
-  print(AppConfig.searchOggetto);
   return List<String>.generate(AppConfig.datiCount, (index) {
     if (index == (AppConfig.nameIndex)) {
       return "Cognome Nome";
