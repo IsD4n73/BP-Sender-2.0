@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.buste_paga_sender">
+    package="it.d4n73.buste_paga_sender">
    <application
         android:label="buste_paga_sender"
         android:name="${applicationName}"

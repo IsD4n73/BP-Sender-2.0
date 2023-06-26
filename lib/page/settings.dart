@@ -134,6 +134,7 @@ class _SettingsPageState extends State<SettingsPage> {
               },
               child: const Text("Salva Impostazioni"),
             ),
+            const SizedBox(height: 10),
           ],
         ),
       ),
