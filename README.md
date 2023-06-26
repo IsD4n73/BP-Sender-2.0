@@ -30,4 +30,5 @@ Invia email ad una mail list con allegati, corpo della mail in html, oggetto per
     file_picker: ^5.2.6
     syncfusion_flutter_pdfviewer: ^21.1.37
     windows_taskbar: ^1.1.1
+    upgrader: ^7.1.0
 ```

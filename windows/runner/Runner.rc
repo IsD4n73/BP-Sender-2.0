@@ -95,7 +95,7 @@ BEGIN
             VALUE "InternalName", "buste_paga_sender" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
             VALUE "OriginalFilename", "buste_paga_sender.exe" "\0"
-            VALUE "ProductName", "buste_paga_sender" "\0"
+            VALUE "ProductName", "Buste Paga Sender" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

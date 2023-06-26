@@ -2,6 +2,8 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:buste_paga_sender/controller/settings_controller.dart';
 import 'package:buste_paga_sender/page/home.dart';
 import 'package:flutter/material.dart';
+import 'package:buste_paga_sender/common/urls.dart';
+import 'package:upgrader/upgrader.dart';
 
 void main() async {
   await getSavedMailText();
@@ -43,7 +45,19 @@ class MyApp extends StatelessWidget {
       ),
       builder: BotToastInit(), //1. call BotToastInit
       navigatorObservers: [BotToastNavigatorObserver()],
-      home: const HomePage(),
+      home: UpgradeAlert(
+        upgrader: Upgrader(
+          countryCode: "it",
+          languageCode: "it",
+          appcastConfig: AppcastConfiguration(
+            url: AppUrls.appcastUrl,
+          ),
+          durationUntilAlertAgain: const Duration(seconds: 5),
+          messages: UpgraderMessages(code: 'it'),
+          showIgnore: false,
+        ),
+        child: const HomePage(),
+      ),
     );
   }
 }

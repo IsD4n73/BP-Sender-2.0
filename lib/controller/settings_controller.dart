@@ -25,6 +25,11 @@ Future<String> getSavedTheme() async {
   return theme;
 }
 
+// format the mail body
+void formatBody() {
+  AppConfig.msg = AppConfig.msg.replaceAll("\n", "<br>");
+}
+
 // get the saved advanced settings
 Future<void> getSavedAdvanced() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
