@@ -104,9 +104,14 @@ class _SenderPageState extends State<SenderPage> {
                               "NULL";
                           if (dir != "NULL") {
                             try {
+                              String completeLog = "${logController.text}";
+                              completeLog +=
+                                  "\n\n======== NON INVIATE ========\n${notSendController.text}";
+                              completeLog +=
+                                  "\n\n======== INVIATE ========\n${sendController.text}";
                               final File file = File(
                                   '$dir/log-${currentDate.day}-${currentDate.month}-${currentDate.year}-${currentDate.second}.txt');
-                              await file.writeAsString(logController.text);
+                              await file.writeAsString(completeLog);
                               showFileSaved(dir);
                             } catch (_) {
                               showFileError();
