@@ -26,6 +26,9 @@ class _SenderPageState extends State<SenderPage> {
   @override
   void initState() {
     super.initState();
+
+    formatBody();
+
     getSavedAdvanced().then((value) {
       setState(() {
         listData = generateExampleList();

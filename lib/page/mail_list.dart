@@ -69,7 +69,7 @@ class _MailListPageState extends State<MailListPage> {
                 label: const Text(
                   "Scarica le email",
                 ),
-              )
+              ),
             ],
           ),
         ),

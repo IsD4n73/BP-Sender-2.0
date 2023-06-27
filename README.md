@@ -6,16 +6,12 @@ Invia email ad una mail list con allegati, corpo della mail in html, oggetto per
 - Salvataggio credenziali
 - Impostazioni
   - Prefisso Personalizzato
-  - Separatore Personalizzato
-  - Estensione Personalizzata
   - Corpo Email
-  - Attiva/Disattiva Allegato
+  - Separatore Personalizzato
   - Tema Dark/Light
-  - Modifica Posizione Dati (oggetto & nome)
 - Log attività
 - Mail List 
   - Ricerca Mail List
-  - Scarica Email
 - Invio Email
 - Guida Utente
 
@@ -30,4 +26,5 @@ Invia email ad una mail list con allegati, corpo della mail in html, oggetto per
     file_picker: ^5.2.6
     syncfusion_flutter_pdfviewer: ^21.1.37
     windows_taskbar: ^1.1.1
+    upgrader: ^7.1.0
 ```
