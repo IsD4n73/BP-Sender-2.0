@@ -4,6 +4,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:buste_paga_sender/controller/mail_list_controller.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../common/alerts.dart';
 import '../model/maillist_model.dart';
@@ -107,17 +108,25 @@ class _MailListPageState extends State<MailListPage> {
           ),
         ),
         Expanded(
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: mailList.length,
-            physics: const BouncingScrollPhysics(),
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(mailList[index].nome),
-                subtitle: Text(mailList[index].email),
-              );
-            },
-          ),
+          child: mailList.isNotEmpty
+              ? ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: mailList.length,
+                  physics: const BouncingScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(mailList[index].nome),
+                      subtitle: Text(mailList[index].email),
+                    );
+                  },
+                )
+              : Center(
+                  child: LoadingAnimationWidget.flickr(
+                    leftDotColor: Colors.blue,
+                    rightDotColor: Colors.blueGrey,
+                    size: 50,
+                  ),
+                ),
         ),
       ],
     );
