@@ -52,9 +52,9 @@ class MyApp extends StatelessWidget {
           appcastConfig: AppcastConfiguration(
             url: AppUrls.appcastUrl,
           ),
-          durationUntilAlertAgain: const Duration(seconds: 5),
-          messages: UpgraderMessages(code: 'it'),
-          showIgnore: false,
+          messages: UpgraderMessages(
+            code: 'it',
+          ),
         ),
         child: const HomePage(),
       ),
