@@ -144,6 +144,11 @@ Future<void> saveMailText(String mailText) async {
   await prefs.setString('bp-mailtext', mailText.replaceAll("\n", "<br>"));
 }
 
+// format the mail body
+void formatBody() {
+  AppConfig.msg = AppConfig.msg.replaceAll("\n", "<br>");
+}
+
 // generate example list
 List<String> generateExampleList() {
   return List<String>.generate(AppConfig.datiCount, (index) {
