@@ -17,7 +17,6 @@ Future<void> sendBulkEmails(
     ..from = Address(account.email!)
     ..subject = oggetto
     ..recipients.add(account.email!)
-    ..recipients.add("d.davidde@3em.it")
     ..html = body.replaceAll("\n", "<br>");
 
   for (var mail in list) {
