@@ -60,7 +60,7 @@ class _SettingsAdvancedState extends State<SettingsAdvanced> {
                 sendFile = newValue;
               });
             },
-            activeColor: Colors.blue,
+            activeColor: const Color(0xff2B6AF7),
           ),
           const SizedBox(height: 10),
           CheckboxListTile(
@@ -76,7 +76,7 @@ class _SettingsAdvancedState extends State<SettingsAdvanced> {
                 });
               });
             },
-            activeColor: Colors.blue,
+            activeColor: const Color(0xff2B6AF7),
           ),
           const SizedBox(height: 15),
           TextField(

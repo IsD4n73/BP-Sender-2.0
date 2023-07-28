@@ -1,6 +1,8 @@
+import 'package:buste_paga_sender/common/alerts.dart';
 import 'package:buste_paga_sender/controller/bulk_sender_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:windows_taskbar/windows_taskbar.dart';
+import '../common/smtp_configuration.dart';
 import '../controller/mail_list_controller.dart';
 import '../model/maillist_model.dart';
 
@@ -45,7 +47,11 @@ class _BulkSenderPageState extends State<BulkSenderPage> {
                 WindowsTaskbar.setProgressMode(
                     TaskbarProgressMode.indeterminate);
 
-                await sendBulkEmails(oggetto.text, body.text, mailList);
+                if (oggetto.text.isNotEmpty && body.text.isNotEmpty) {
+                  await sendBulkEmails(oggetto.text, body.text, mailList);
+                } else {
+                  showBulkError();
+                }
 
                 WindowsTaskbar.setProgressMode(TaskbarProgressMode.noProgress);
               },
@@ -69,11 +75,23 @@ class _BulkSenderPageState extends State<BulkSenderPage> {
             const SizedBox(height: 10),
             TextField(
               controller: body,
-              maxLines: '\n'.allMatches(body.text).length + 2,
+              maxLines: '\n'.allMatches(body.text).length + 1,
               onChanged: (value) => setState(() {}),
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: 'Corpo Email',
+                labelText: 'Corpo Email (HTML)',
+              ),
+            ),
+            const SizedBox(height: 15),
+            Align(
+              alignment: Alignment.centerRight,
+              child: ElevatedButton(
+                onPressed: () async {
+                  setState(() {
+                    body.text += AppConfig.firma;
+                  });
+                },
+                child: const Text("Inserisci Firma"),
               ),
             ),
             const SizedBox(height: 25),

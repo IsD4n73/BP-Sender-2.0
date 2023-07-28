@@ -1,4 +1,5 @@
 import 'package:bot_toast/bot_toast.dart';
+import 'package:buste_paga_sender/common/theme.dart';
 import 'package:buste_paga_sender/controller/settings_controller.dart';
 import 'package:buste_paga_sender/page/home.dart';
 import 'package:flutter/material.dart';
@@ -35,10 +36,10 @@ class MyApp extends StatelessWidget {
       title: 'Buste Paga Sender',
       themeMode: tema,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: AppTheme.getMaterialColor(const Color(0xff2B6AF7)),
       ),
       darkTheme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: AppTheme.getMaterialColor(const Color(0xff2B6AF7)),
         brightness: Brightness.dark,
       ),
       builder: BotToastInit(), //1. call BotToastInit

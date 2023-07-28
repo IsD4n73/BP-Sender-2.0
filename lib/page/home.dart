@@ -36,8 +36,10 @@ class _HomePageState extends State<HomePage> {
             expandable: false,
             initiallyExpanded: true,
             header: SideNavigationBarHeader(
-              image: CircleAvatar(
-                child: Image.asset("assets/logo.png"),
+              image: Image.asset(
+                "assets/logo.png",
+                width: 100,
+                height: 70,
               ),
               title: const Text('3EM'),
               subtitle: const Text('Engineering'),

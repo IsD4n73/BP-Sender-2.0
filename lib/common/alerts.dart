@@ -109,6 +109,29 @@ void showSettingsSaved() {
   );
 }
 
+/// [Bulk ALERT] ///
+void showBulkError() {
+  BotToast.showCustomNotification(
+    useSafeArea: true,
+    duration: const Duration(seconds: 4),
+    toastBuilder: (cancelFunc) {
+      return const Card(
+        elevation: 5,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(Icons.error),
+            Text(
+              "L'oggetto e il corpo della mail non possono essere vuoti",
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
 /// [FILE ALERT] ///
 void showFileError() {
   BotToast.showCustomNotification(

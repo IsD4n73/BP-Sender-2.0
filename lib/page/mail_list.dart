@@ -122,7 +122,7 @@ class _MailListPageState extends State<MailListPage> {
                 )
               : Center(
                   child: LoadingAnimationWidget.flickr(
-                    leftDotColor: Colors.blue,
+                    leftDotColor: const Color(0xff2B6AF7),
                     rightDotColor: Colors.blueGrey,
                     size: 50,
                   ),
