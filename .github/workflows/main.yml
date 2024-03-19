@@ -26,11 +26,11 @@ jobs:
         with:
           type: 'zip'
           filename: BP-Sender-${{github.ref_name}}-windows.zip
-          directory: build/windows/runner/Release
+          directory: build/windows/x64/runner/Release
       - name: Windows Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: build/windows/runner/Release/BP-Sender-${{github.ref_name}}-windows.zip
+          files: build/windows/runner/x64/Release/BP-Sender-${{github.ref_name}}-windows.zip
