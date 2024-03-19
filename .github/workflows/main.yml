@@ -3,7 +3,7 @@ name: Flutter CI
 on: push
 
 jobs:
-  build-and-release-windows:
+  build-release-windows:
     runs-on: windows-latest
 
     steps:
