@@ -23,13 +23,12 @@ Invia email ad una mail list con allegati, corpo della mail in html, oggetto per
 ## Dipendenze
 ```yaml  
   side_navigation: ^1.0.4
-  shared_preferences: ^2.0.20
-  mailer: ^6.0.0
-  http: ^0.13.5
-  bot_toast: ^4.0.3
-  file_picker: ^5.2.6
-  syncfusion_flutter_pdfviewer: ^21.1.37
-  windows_taskbar: ^1.1.1
-  loading_animation_widget: ^1.2.0+4
-  flutter_html: ^2.2.1
+  shared_preferences: ^2.2.2
+  mailer: ^6.1.0
+  http: ^1.2.1
+  bot_toast: ^4.1.3
+  file_picker: ^6.2.0
+  syncfusion_flutter_pdfviewer: ^23.1.36
+  windows_taskbar: ^1.1.2
+  loading_animation_widget: ^1.2.1
 ```
