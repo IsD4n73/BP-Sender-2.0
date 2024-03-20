@@ -5,6 +5,8 @@ import 'package:buste_paga_sender/page/home.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   await getSavedMailText();
   await getSavedAdvanced();
 
@@ -36,13 +38,18 @@ class MyApp extends StatelessWidget {
       title: 'Buste Paga Sender',
       themeMode: tema,
       theme: ThemeData(
-        primarySwatch: AppTheme.getMaterialColor(const Color(0xff2B6AF7)),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xff2B6AF7),
+          brightness: Brightness.light,
+        ),
       ),
       darkTheme: ThemeData(
-        primarySwatch: AppTheme.getMaterialColor(const Color(0xff2B6AF7)),
-        brightness: Brightness.dark,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xff2B6AF7),
+          brightness: Brightness.dark,
+        ),
       ),
-      builder: BotToastInit(), //1. call BotToastInit
+      builder: BotToastInit(),
       navigatorObservers: [BotToastNavigatorObserver()],
       home: const HomePage(),
     );
