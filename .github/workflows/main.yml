@@ -34,4 +34,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: "rel"
-          files: build/windows/runner/x64/Release/BP-Sender-${{github.ref_name}}-windows.zip
+          files: build/windows/x64/runner/Release/BP-Sender-${{github.ref_name}}-windows.zip
