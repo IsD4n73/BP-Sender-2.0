@@ -90,7 +90,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     setState(() {
                       selectedTheme = value;
                     });
-                    showThemeAlert();
+                    AlertUtils.showInfo(
+                        "Per visualizzare il tema riavviare l'applicazione");
                   },
                 ),
               ],
@@ -127,9 +128,10 @@ class _SettingsPageState extends State<SettingsPage> {
 
                 if (prefixController.text.isNotEmpty) {
                   await saveSettings(prefixController.text);
-                  showSettingsSaved();
+                  AlertUtils.showSuccess("Impostazioni salvate correttamente");
                 } else {
-                  showSettingsError();
+                  AlertUtils.showError(
+                      "Non è possibile salvare le impostazioni, controllare i campi e riprovare");
                 }
               },
               child: const Text("Salva Impostazioni"),

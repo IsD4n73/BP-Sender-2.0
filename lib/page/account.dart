@@ -75,9 +75,10 @@ class _AccountPageState extends State<AccountPage> {
                     userController.text.isNotEmpty) {
                   await saveAccount(emailController.text, pswController.text,
                       userController.text);
-                  showAccountSaved();
+                  AlertUtils.showInfo("Account salvato correttamente");
                 } else {
-                  showAccountError();
+                  AlertUtils.showError(
+                      "Errore nel salvare l'account, riprova.");
                 }
               },
               child: const Text("Salva Account"),

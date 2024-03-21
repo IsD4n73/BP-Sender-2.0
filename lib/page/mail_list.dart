@@ -57,13 +57,15 @@ class _MailListPageState extends State<MailListPage> {
                         csv += "${element.nome};${element.email}\n";
                       });
                       await file.writeAsString(csv);
-                      showFileSaved(dir);
+                      AlertUtils.showSuccess("Il file è stato salvato in $dir");
                     } catch (_) {
-                      showFileError();
+                      AlertUtils.showError(
+                          "Non è stato possibile salvare il file");
                     }
                     cancel();
                   } else {
-                    showFileError();
+                    AlertUtils.showError(
+                        "Non è stato possibile salvare il file");
                   }
                 },
                 icon: const Icon(Icons.download),

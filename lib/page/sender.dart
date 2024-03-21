@@ -112,9 +112,11 @@ class _SenderPageState extends State<SenderPage> {
                               final File file = File(
                                   '$dir/log-${currentDate.day}-${currentDate.month}-${currentDate.year}-${currentDate.second}.txt');
                               await file.writeAsString(completeLog);
-                              showFileSaved(dir);
+                              AlertUtils.showSuccess(
+                                  "Il file è stato salvato in $dir");
                             } catch (_) {
-                              showFileError();
+                              AlertUtils.showError(
+                                  "Non è stato possibile salvare il file");
                             }
                           }
                         } else {
@@ -122,9 +124,11 @@ class _SenderPageState extends State<SenderPage> {
                             final File file = File(
                                 '$dir/log-${currentDate.day}-${currentDate.month}-${currentDate.year}-${currentDate.second}.txt');
                             await file.writeAsString(logController.text);
-                            showFileSaved(dir);
+                            AlertUtils.showSuccess(
+                                "Il file è stato salvato in $dir");
                           } catch (_) {
-                            showFileError();
+                            AlertUtils.showError(
+                                "Non è stato possibile salvare il file");
                           }
                         }
                       },

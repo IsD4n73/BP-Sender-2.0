@@ -9,7 +9,7 @@ import '../model/maillist_model.dart';
 TextEditingController bulklogController = TextEditingController();
 
 class BulkSenderPage extends StatefulWidget {
-  const BulkSenderPage({Key? key}) : super(key: key);
+  const BulkSenderPage({super.key});
 
   @override
   State<BulkSenderPage> createState() => _BulkSenderPageState();
@@ -50,7 +50,7 @@ class _BulkSenderPageState extends State<BulkSenderPage> {
                 if (oggetto.text.isNotEmpty && body.text.isNotEmpty) {
                   await sendBulkEmails(oggetto.text, body.text, mailList);
                 } else {
-                  showBulkError();
+                  AlertUtils.showError("Errore nell'inviare le email");
                 }
 
                 WindowsTaskbar.setProgressMode(TaskbarProgressMode.noProgress);
