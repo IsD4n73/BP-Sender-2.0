@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:ui';
+import 'package:buste_paga_sender/model/correction_ocr.dart';
+import 'package:buste_paga_sender/page/file_splitter.dart';
+import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:http/http.dart' as http;
@@ -16,6 +18,7 @@ Future<void> createSplittedDir(String dir) async {
 
 // split file to multiple
 Future<void> splitFile(File file) async {
+  namesController.text = "\n======== INIZIO ========\n\n";
   var bytes = await file.readAsBytes();
   final PdfDocument document = PdfDocument(inputBytes: bytes);
   document.security.permissions.addAll(PdfPermissionsFlags.values);
@@ -33,8 +36,11 @@ Future<void> splitFile(File file) async {
   }
 
   int doneFile = 0;
-  print("TOT PAG: ${document.pages.count}");
-  print("FILE GEN: $fileToGenerate");
+  debugPrint("TOT PAG: ${document.pages.count}");
+  debugPrint("FILE GEN: $fileToGenerate");
+  namesController.text +=
+      "\n[INFO] ==> Pagine del documento: ${document.pages.count}";
+  namesController.text += "\n[INFO] ==> File da generare: $fileToGenerate\n\n";
 
   PdfDocument splittedPdf = PdfDocument();
   splittedPdf.pageSettings.margins.all = 0;
@@ -81,11 +87,23 @@ Future<void> splitFile(File file) async {
       );
 
       if (response.statusCode == 200) {
-        String nameFound = response.body;
-        print("NOME TROVATO: $nameFound");
+        String nameFound = response.body.trim();
+        CorrectionOcr.correction.any((e) {
+          if (nameFound.contains(e.ocr.toUpperCase())) {
+            debugPrint("Correzione effettuata ${e.ocr} -> ${e.name}");
+            nameFound = nameFound.replaceAll(
+              e.ocr.toUpperCase(),
+              e.name.toUpperCase(),
+            );
+          }
+          return false;
+        });
+        debugPrint("NOME TROVATO: $nameFound");
         tmpFile.renameSync(
           tmpFile.path.replaceAll("$fileToGenerate", nameFound),
         );
+        namesController.text +=
+            "\n[INFO] ==> File generato correttamente con nome: $nameFound";
       }
 
       /* ============= */
@@ -97,4 +115,5 @@ Future<void> splitFile(File file) async {
     }
   }
   document.dispose();
+  namesController.text += "\n\n======== FINE ========\n";
 }

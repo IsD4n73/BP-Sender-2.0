@@ -4,7 +4,7 @@ import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../common/urls.dart';
 
 class UserGuidePage extends StatefulWidget {
-  const UserGuidePage({Key? key}) : super(key: key);
+  const UserGuidePage({super.key});
 
   @override
   State<UserGuidePage> createState() => _UserGuidePageState();

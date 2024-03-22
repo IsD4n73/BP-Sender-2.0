@@ -13,7 +13,7 @@ TextEditingController sendController = TextEditingController();
 TextEditingController notSendController = TextEditingController();
 
 class SenderPage extends StatefulWidget {
-  const SenderPage({Key? key}) : super(key: key);
+  const SenderPage({super.key});
 
   @override
   State<SenderPage> createState() => _SenderPageState();
@@ -104,7 +104,7 @@ class _SenderPageState extends State<SenderPage> {
                               "NULL";
                           if (dir != "NULL") {
                             try {
-                              String completeLog = "${logController.text}";
+                              String completeLog = logController.text;
                               completeLog +=
                                   "\n\n======== NON INVIATE ========\n${notSendController.text}";
                               completeLog +=

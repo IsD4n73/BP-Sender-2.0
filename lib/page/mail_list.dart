@@ -10,7 +10,7 @@ import '../common/alerts.dart';
 import '../model/maillist_model.dart';
 
 class MailListPage extends StatefulWidget {
-  const MailListPage({Key? key}) : super(key: key);
+  const MailListPage({super.key});
 
   @override
   State<MailListPage> createState() => _MailListPageState();

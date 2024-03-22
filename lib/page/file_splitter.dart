@@ -1,12 +1,19 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:bot_toast/bot_toast.dart';
-import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:buste_paga_sender/common/alerts.dart';
 import 'package:buste_paga_sender/controller/splitter_controller.dart';
+import 'package:buste_paga_sender/model/correction_ocr.dart';
+import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:http/http.dart' as http;
+import '../common/urls.dart';
+import '../controller/settings_controller.dart';
+
+TextEditingController namesController = TextEditingController();
 
 class SplitPage extends StatefulWidget {
   const SplitPage({super.key});
@@ -17,6 +24,16 @@ class SplitPage extends StatefulWidget {
 
 class _SplitPageState extends State<SplitPage> {
   File? file;
+  String dir = Directory.current.path;
+
+  @override
+  void initState() {
+    setState(() {
+      file = null;
+      namesController.clear();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +76,13 @@ class _SplitPageState extends State<SplitPage> {
 
                     if (result != null) {
                       file = File(result.files.single.path!);
+                      if (CorrectionOcr.correction.isEmpty) {
+                        final response =
+                            await http.get(Uri.parse(AppUrls.ocrFile));
+                        if (response.statusCode == 200) {
+                          CorrectionOcr.fromJson(jsonDecode(response.body));
+                        }
+                      }
                       setState(() {});
                     }
                   },
@@ -69,25 +93,82 @@ class _SplitPageState extends State<SplitPage> {
                     "File Selezionato: ${file != null ? basename(file!.path) : ""}"),
                 const SizedBox(height: 25),
                 ElevatedButton(
-                  onPressed: () async {
-                    if (file == null) {
-                      AlertUtils.showInfo(
-                          "Non è stato selezionato nessun file");
-                      return;
-                    }
-                    final cancel = BotToast.showLoading();
+                  onPressed: file == null
+                      ? null
+                      : () async {
+                          final cancel = BotToast.showLoading();
 
-                    try {
-                      await createSplittedDir(file!.parent.path);
-                      await splitFile(file!);
-                    } catch (_) {
-                      AlertUtils.showError(
-                          "Non è possibile dividere questo PDF, riprova.");
-                    } finally {
-                      cancel();
-                    }
-                  },
+                          try {
+                            await createSplittedDir(file!.parent.path);
+                            await splitFile(file!);
+                            AlertUtils.showSuccess(
+                                "La creazione di file separati è andata a buon fine!");
+                          } catch (_) {
+                            AlertUtils.showError(
+                                "Non è possibile dividere questo PDF, riprova.");
+                          } finally {
+                            cancel();
+                          }
+                        },
                   child: const Text("Avvia"),
+                ),
+                const SizedBox(height: 25),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    controller: namesController,
+                    maxLines: 10,
+                    readOnly: true,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'LOG',
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: ElevatedButton(
+                    onPressed: namesController.text.isEmpty
+                        ? null
+                        : () async {
+                            DateTime currentDate = DateTime.now();
+
+                            var settings = await getSavedSettings();
+                            if (!settings.takeExeDir) {
+                              dir = await FilePicker.platform.getDirectoryPath(
+                                    dialogTitle:
+                                        "Seleziona la cartella dove salvare il file",
+                                  ) ??
+                                  "NULL";
+                              if (dir != "NULL") {
+                                try {
+                                  String completeLog = namesController.text;
+
+                                  final File file = File(
+                                      '$dir/log-${currentDate.day}-${currentDate.month}-${currentDate.year}-${currentDate.second}.txt');
+                                  await file.writeAsString(completeLog);
+                                  AlertUtils.showSuccess(
+                                      "Il file è stato salvato in $dir");
+                                } catch (_) {
+                                  AlertUtils.showError(
+                                      "Non è stato possibile salvare il file");
+                                }
+                              }
+                            } else {
+                              try {
+                                final File file = File(
+                                    '$dir/log-${currentDate.day}-${currentDate.month}-${currentDate.year}-${currentDate.second}.txt');
+                                await file.writeAsString(namesController.text);
+                                AlertUtils.showSuccess(
+                                    "Il file è stato salvato in $dir");
+                              } catch (_) {
+                                AlertUtils.showError(
+                                    "Non è stato possibile salvare il file");
+                              }
+                            }
+                          },
+                    child: const Text("Salva Log"),
+                  ),
                 ),
               ],
             ),
@@ -118,16 +199,24 @@ showGuideDialog(BuildContext context) {
           const Divider(),
           const SizedBox(height: 5),
           Linkify(
-           onOpen: (link) => print("Clicked ${link.url}!"),
-           text: "1) Scaricare il file da https://github.com/UB-Mannheim/tesseract/wiki",
-          ), 
+            onOpen: (link) async {
+              await Clipboard.setData(ClipboardData(text: link.url));
+              AlertUtils.showInfo("Il link è stato copiato");
+            },
+            text:
+                "1) Scaricare il file da https://github.com/UB-Mannheim/tesseract/wiki",
+          ),
           const Text(
               "2) Add Tesseract path to your System Environment. i.e. Edit system variables."),
           Linkify(
-           onOpen: (link) => print("Clicked ${link.url}!"),
-           text: "3) Scaricare python da https://www.python.org/downloads/",
-          ), 
-          const Text("4) Eseguire nel terminale:\n  - pip install pytesseract\n  - pip install tesseract"),
+            onOpen: (link) async {
+              await Clipboard.setData(ClipboardData(text: link.url));
+              AlertUtils.showInfo("Il link è stato copiato");
+            },
+            text: "3) Scaricare python da https://www.python.org/downloads/",
+          ),
+          const Text(
+              "4) Eseguire nel terminale:\n  - pip install pytesseract\n  - pip install tesseract"),
           const SizedBox(height: 5),
           const Divider(),
           const SizedBox(height: 10),
@@ -136,7 +225,8 @@ showGuideDialog(BuildContext context) {
           const SizedBox(height: 5),
           const Text(
               "1) Selezionare un file cliccando sul pulsante 'Seleziona File'"),
-          const Text("2) Cliccare sul pulsante 'Avvia' e attendere il completamento"),
+          const Text(
+              "2) Cliccare sul pulsante 'Avvia' e attendere il completamento"),
           const Text(
               "3) I PDF divisi saranno nella cartella 'Splitted' dove si trova il file principale"),
           const SizedBox(height: 5),

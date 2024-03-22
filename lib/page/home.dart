@@ -5,11 +5,12 @@ import 'package:buste_paga_sender/page/sender.dart';
 import 'package:buste_paga_sender/page/settings.dart';
 import 'package:buste_paga_sender/page/user_guide.dart';
 import 'package:flutter/material.dart';
+import 'package:serious_python/serious_python.dart';
 import 'package:side_navigation/side_navigation.dart';
 import 'file_splitter.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -27,6 +28,12 @@ class _HomePageState extends State<HomePage> {
   ];
 
   int selectedIndex = 0;
+
+  @override
+  void initState() {
+    SeriousPython.run("app/app.zip");
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

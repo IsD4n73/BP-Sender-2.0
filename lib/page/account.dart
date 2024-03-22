@@ -3,7 +3,7 @@ import 'package:buste_paga_sender/controller/account_controller.dart';
 import 'package:flutter/material.dart';
 
 class AccountPage extends StatefulWidget {
-  const AccountPage({Key? key}) : super(key: key);
+  const AccountPage({super.key});
 
   @override
   State<AccountPage> createState() => _AccountPageState();
