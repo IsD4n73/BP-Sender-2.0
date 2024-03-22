@@ -2,10 +2,11 @@ import 'dart:io';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:buste_paga_sender/common/alerts.dart';
-import 'package:buste_paga_sender/controller/file_splitter.dart';
+import 'package:buste_paga_sender/controller/splitter_controller.dart';
 import 'package:path/path.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 
 class SplitPage extends StatefulWidget {
   const SplitPage({super.key});
@@ -116,7 +117,10 @@ showGuideDialog(BuildContext context) {
           SizedBox(height: 5),
           Divider(),
           SizedBox(height: 5),
-          Text("1) https://github.com/UB-Mannheim/tesseract/wiki"),
+          Linkify(
+           onOpen: (link) => print("Clicked ${link.url}!"),
+           text: "1) Scaricare il file da https://github.com/UB-Mannheim/tesseract/wiki",
+          ), 
           Text(
               "2) Add Tesseract path to your System Environment. i.e. Edit system variables."),
           Text("3) Download python"),
