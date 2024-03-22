@@ -108,39 +108,39 @@ showGuideDialog(BuildContext context) {
 
   AlertDialog alert = AlertDialog(
     title: const Text("Guida Divisione PDF"),
-    content: const SingleChildScrollView(
+    content: SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 10),
-          Text("PRIMA INSTALLAZIONE"),
-          SizedBox(height: 5),
-          Divider(),
-          SizedBox(height: 5),
+          const SizedBox(height: 10),
+          const Text("PRIMA INSTALLAZIONE"),
+          const SizedBox(height: 5),
+          const Divider(),
+          const SizedBox(height: 5),
           Linkify(
            onOpen: (link) => print("Clicked ${link.url}!"),
            text: "1) Scaricare il file da https://github.com/UB-Mannheim/tesseract/wiki",
           ), 
-          Text(
+          const Text(
               "2) Add Tesseract path to your System Environment. i.e. Edit system variables."),
           Linkify(
            onOpen: (link) => print("Clicked ${link.url}!"),
            text: "3) Scaricare python da https://www.python.org/downloads/",
           ), 
-          Text("4) Eseguire nel terminale:\n  - pip install pytesseract\n  - pip install tesseract"),
-          SizedBox(height: 5),
-          Divider(),
-          SizedBox(height: 10),
-          Text("UTILIZZO"),
-          Divider(),
-          SizedBox(height: 5),
-          Text(
+          const Text("4) Eseguire nel terminale:\n  - pip install pytesseract\n  - pip install tesseract"),
+          const SizedBox(height: 5),
+          const Divider(),
+          const SizedBox(height: 10),
+          const Text("UTILIZZO"),
+          const Divider(),
+          const SizedBox(height: 5),
+          const Text(
               "1) Selezionare un file cliccando sul pulsante 'Seleziona File'"),
-          Text("2) Cliccare sul pulsante 'Avvia' e attendere il completamento"),
-          Text(
+          const Text("2) Cliccare sul pulsante 'Avvia' e attendere il completamento"),
+          const Text(
               "3) I PDF divisi saranno nella cartella 'Splitted' dove si trova il file principale"),
-          SizedBox(height: 5),
-          Divider(),
+          const SizedBox(height: 5),
+          const Divider(),
         ],
       ),
     ),
