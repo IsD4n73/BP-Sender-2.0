@@ -123,8 +123,11 @@ showGuideDialog(BuildContext context) {
           ), 
           Text(
               "2) Add Tesseract path to your System Environment. i.e. Edit system variables."),
-          Text("3) Download python"),
-          Text("3) Run pip install pytesseract and pip install tesseract"),
+          Linkify(
+           onOpen: (link) => print("Clicked ${link.url}!"),
+           text: "3) Scaricare python da https://www.python.org/downloads/",
+          ), 
+          Text("4) Eseguire nel terminale:\n  - pip install pytesseract\n  - pip install tesseract"),
           SizedBox(height: 5),
           Divider(),
           SizedBox(height: 10),
