@@ -6,6 +6,7 @@ import 'package:buste_paga_sender/page/settings.dart';
 import 'package:buste_paga_sender/page/user_guide.dart';
 import 'package:flutter/material.dart';
 import 'package:side_navigation/side_navigation.dart';
+import 'file_splitter.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -20,6 +21,7 @@ class _HomePageState extends State<HomePage> {
     BulkSenderPage(),
     AccountPage(),
     MailListPage(),
+    SplitPage(),
     SettingsPage(),
     UserGuidePage(),
   ];
@@ -61,6 +63,10 @@ class _HomePageState extends State<HomePage> {
               SideNavigationBarItem(
                 icon: Icons.email_rounded,
                 label: 'Mail List',
+              ),
+              SideNavigationBarItem(
+                icon: Icons.splitscreen,
+                label: 'File Split',
               ),
               SideNavigationBarItem(
                 icon: Icons.settings,

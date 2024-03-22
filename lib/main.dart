@@ -1,11 +1,12 @@
 import 'package:bot_toast/bot_toast.dart';
-import 'package:buste_paga_sender/common/theme.dart';
 import 'package:buste_paga_sender/controller/settings_controller.dart';
 import 'package:buste_paga_sender/page/home.dart';
 import 'package:flutter/material.dart';
+import 'package:serious_python/serious_python.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SeriousPython.run("app/app.zip");
 
   await getSavedMailText();
   await getSavedAdvanced();
