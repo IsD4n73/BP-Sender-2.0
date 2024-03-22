@@ -48,6 +48,7 @@ dependencies:
   windows_taskbar: ^1.1.2
   loading_animation_widget: ^1.2.1
   serious_python: ^0.7.0
+  flutter_linkify: ^6.0.0
 
 dev_dependencies:
   flutter_test:
