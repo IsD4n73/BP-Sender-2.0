@@ -14,7 +14,7 @@ def hello_world():
     return 'OCR SERVER ONLINE'
 
 
-@app.route('/ocr', methods=['POST'])
+@app.route('/ocr/cu', methods=['POST'])
 def ocr():
     regex = r"\b([a-zA-Z]+'?[a-zA-Z]+)\b"
     # Get image as BASE64
