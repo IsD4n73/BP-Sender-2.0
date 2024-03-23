@@ -81,7 +81,7 @@ Future<void> splitFile(File file) async {
       var image = await rasterPdf.toPng();
 
       var response = await http.post(
-        Uri.parse('http://127.0.0.1:55001/ocr'),
+        Uri.parse('http://127.0.0.1:55001/ocr/cu'),
         headers: {"Content-Type": "application/json"},
         body: json.encode({'img': base64Encode(image)}),
       );
