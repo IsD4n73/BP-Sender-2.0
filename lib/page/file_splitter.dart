@@ -24,14 +24,31 @@ class SplitPage extends StatefulWidget {
 
 class _SplitPageState extends State<SplitPage> {
   File? file;
+  int status = -1;
   String dir = Directory.current.path;
 
   @override
   void initState() {
     setState(() {
       file = null;
+      status = -1;
       namesController.clear();
     });
+
+    Future.delayed(Duration.zero, 
+      () async {
+        var response = await http.post(
+          Uri.parse('http://127.0.0.1:55001/'),
+        );
+        setState((){
+          if(response.statusCode == 200){
+            status = 0;
+          }else{
+            status = 1;
+          }
+        });  
+      },
+    );
     super.initState();
   }
 
