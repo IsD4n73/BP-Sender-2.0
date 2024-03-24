@@ -35,18 +35,25 @@ class _SplitPageState extends State<SplitPage> {
       namesController.clear();
     });
 
-    Future.delayed(Duration.zero, 
+    Future.delayed(
+      Duration.zero,
       () async {
-        var response = await http.post(
-          Uri.parse('http://127.0.0.1:55001/'),
-        );
-        setState((){
-          if(response.statusCode == 200){
-            status = 0;
-          }else{
+        try {
+          var response = await http.post(
+            Uri.parse('http://127.0.0.1:55001/'),
+          );
+          setState(() {
+            if (response.statusCode == 200) {
+              status = 0;
+            } else {
+              status = 1;
+            }
+          });
+        } catch (e) {
+          setState(() {
             status = 1;
-          }
-        });  
+          });
+        }
       },
     );
     super.initState();
@@ -54,6 +61,19 @@ class _SplitPageState extends State<SplitPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (status == -1) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    if (status == 1) {
+      AlertUtils.showError("A causa di un errore non è possibile procedere");
+      return const Center(
+        child: Text("ERRORE NELL AVVIARE IL SERVER  "),
+      );
+    }
+
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(

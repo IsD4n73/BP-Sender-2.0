@@ -5,7 +5,6 @@ import 'package:buste_paga_sender/page/sender.dart';
 import 'package:buste_paga_sender/page/settings.dart';
 import 'package:buste_paga_sender/page/user_guide.dart';
 import 'package:flutter/material.dart';
-import 'package:serious_python/serious_python.dart';
 import 'package:side_navigation/side_navigation.dart';
 import 'file_splitter.dart';
 
@@ -31,7 +30,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    SeriousPython.run("app/app.zip");
     super.initState();
   }
 
