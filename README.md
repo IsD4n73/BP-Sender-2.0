@@ -23,7 +23,8 @@ Invia email ad una mail list con allegati, corpo della mail in html, oggetto per
 
 ## Dipendenze
 ```yaml  
-  _preferences: ^2.2.2
+  side_navigation: ^1.0.4
+  shared_preferences: ^2.2.2
   mailer: ^6.1.0
   http: ^1.2.1
   bot_toast: ^4.1.3
@@ -33,5 +34,6 @@ Invia email ad una mail list con allegati, corpo della mail in html, oggetto per
   printing: ^5.12.0
   windows_taskbar: ^1.1.2
   loading_animation_widget: ^1.2.1
-  serious_python: ^0.7.0
+  flutter_linkify: ^6.0.0
+  python_shell: ^0.0.7
 ```
