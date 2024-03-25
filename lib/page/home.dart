@@ -1,3 +1,4 @@
+import 'package:buste_paga_sender/common/alerts.dart';
 import 'package:buste_paga_sender/page/account.dart';
 import 'package:buste_paga_sender/page/bulk_sender.dart';
 import 'package:buste_paga_sender/page/mail_list.dart';
@@ -30,6 +31,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    AlertUtils.checkUpgrade();
     super.initState();
   }
 
