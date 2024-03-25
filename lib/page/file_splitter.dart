@@ -10,6 +10,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:http/http.dart' as http;
+import 'package:python_shell/python_shell.dart';
 import '../common/urls.dart';
 import '../controller/settings_controller.dart';
 
@@ -24,49 +25,25 @@ class SplitPage extends StatefulWidget {
 
 class _SplitPageState extends State<SplitPage> {
   File? file;
-  int status = -1;
+  int status = 3;
   String dir = Directory.current.path;
+
+  var shell = PythonShell(
+    PythonShellConfig(),
+  );
 
   @override
   void initState() {
     setState(() {
       file = null;
-      status = -1;
+      status = 3;
       namesController.clear();
     });
-
-    Future.delayed(
-      Duration.zero,
-      () async {
-        try {
-          var response = await http.post(
-            Uri.parse('http://127.0.0.1:55001/'),
-          );
-          setState(() {
-            if (response.statusCode == 200) {
-              status = 0;
-            } else {
-              status = 1;
-            }
-          });
-        } catch (e) {
-          setState(() {
-            status = 1;
-          });
-        }
-      },
-    );
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (status == -1) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    }
-
     if (status == 1) {
       AlertUtils.showError("A causa di un errore non è possibile procedere");
       return const Center(
@@ -120,6 +97,56 @@ class _SplitPageState extends State<SplitPage> {
                           CorrectionOcr.fromJson(jsonDecode(response.body));
                         }
                       }
+                      try {
+                        await http
+                            .get(Uri.parse('http://127.0.0.1:55004/stop'));
+                      } catch (_) {
+                        debugPrint(
+                            "Il server non è gia spento, shutdown non necessario");
+                      }
+
+                      try {
+                        status = -1;
+                        setState(() {});
+
+                        var instance = ShellManager.getInstance("default");
+                        instance.installRequires(
+                          [
+                            "flask",
+                            "pytesseract",
+                          ],
+                          echo: true,
+                        );
+
+                        instance.runFile("assets/app/main.py", echo: true);
+
+                        while (true) {
+                          try {
+                            var response = await http.get(
+                              Uri.parse('http://127.0.0.1:55004/'),
+                            );
+                            setState(() {
+                              if (response.statusCode == 200) {
+                                debugPrint(response.body.trim());
+                                status = 0;
+                              } else {
+                                status = 1;
+                              }
+                            });
+                            return;
+                          } catch (e) {
+                            debugPrint("Riprovo a chiamare il servizio");
+                            await Future.delayed(
+                              const Duration(milliseconds: 500),
+                            );
+                          }
+                        }
+                      } catch (e) {
+                        setState(() {
+                          status = 1;
+                        });
+                      }
+
                       setState(() {});
                     }
                   },
@@ -129,26 +156,30 @@ class _SplitPageState extends State<SplitPage> {
                 Text(
                     "File Selezionato: ${file != null ? basename(file!.path) : ""}"),
                 const SizedBox(height: 25),
-                ElevatedButton(
-                  onPressed: file == null
-                      ? null
-                      : () async {
-                          final cancel = BotToast.showLoading();
+                status == 0
+                    ? ElevatedButton(
+                        onPressed: file == null
+                            ? null
+                            : () async {
+                                final cancel = BotToast.showLoading();
 
-                          try {
-                            await createSplittedDir(file!.parent.path);
-                            await splitFile(file!);
-                            AlertUtils.showSuccess(
-                                "La creazione di file separati è andata a buon fine!");
-                          } catch (_) {
-                            AlertUtils.showError(
-                                "Non è possibile dividere questo PDF, riprova.");
-                          } finally {
-                            cancel();
-                          }
-                        },
-                  child: const Text("Avvia"),
-                ),
+                                try {
+                                  await createSplittedDir(file!.parent.path);
+                                  await splitFile(file!);
+                                  AlertUtils.showSuccess(
+                                      "La creazione di file separati è andata a buon fine!");
+                                } catch (e) {
+                                  AlertUtils.showError(
+                                      "Non è possibile dividere questo PDF, riprova.");
+                                } finally {
+                                  cancel();
+                                }
+                              },
+                        child: const Text("Avvia"),
+                      )
+                    : status == -1
+                        ? const CircularProgressIndicator()
+                        : const SizedBox.shrink(),
                 const SizedBox(height: 25),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -214,6 +245,15 @@ class _SplitPageState extends State<SplitPage> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    Future.delayed(
+      Duration.zero,
+      () async => await http.get(Uri.parse('http://127.0.0.1:55004/stop')),
+    );
+    super.dispose();
+  }
 }
 
 showGuideDialog(BuildContext context) {
@@ -243,8 +283,7 @@ showGuideDialog(BuildContext context) {
             text:
                 "1) Scaricare il file da https://github.com/UB-Mannheim/tesseract/wiki",
           ),
-          const Text(
-              "2) Add Tesseract path to your System Environment. i.e. Edit system variables."),
+          const Text("2) Aggiungere Tesseract alle variabili di ambiente"),
           Linkify(
             onOpen: (link) async {
               await Clipboard.setData(ClipboardData(text: link.url));

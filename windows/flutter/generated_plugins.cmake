@@ -4,7 +4,6 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   printing
-  serious_python_windows
   syncfusion_pdfviewer_windows
   url_launcher_windows
   windows_taskbar
