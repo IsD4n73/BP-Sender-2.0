@@ -40,7 +40,11 @@ class _HomePageState extends State<HomePage> {
         children: [
           SideNavigationBar(
             selectedIndex: selectedIndex,
-            expandable: false,
+            //expandable: false,
+            toggler: const SideBarToggler(
+              expandIcon: Icons.keyboard_double_arrow_right,
+              shrinkIcon: Icons.keyboard_double_arrow_left,
+            ),
             initiallyExpanded: true,
             header: SideNavigationBarHeader(
               image: Image.asset(
@@ -54,11 +58,11 @@ class _HomePageState extends State<HomePage> {
             footer: const SideNavigationBarFooter(label: Text('3em.it')),
             items: const [
               SideNavigationBarItem(
-                icon: Icons.dashboard,
+                icon: Icons.document_scanner,
                 label: 'Home',
               ),
               SideNavigationBarItem(
-                icon: Icons.dashboard,
+                icon: Icons.alternate_email,
                 label: 'Invio a Mail List',
               ),
               SideNavigationBarItem(
