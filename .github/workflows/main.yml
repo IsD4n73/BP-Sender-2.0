@@ -22,7 +22,7 @@ jobs:
       #  run: dart run serious_python:main package assets/app/
 
       - name: Build artifacts
-        run: flutter build windows --release
+        run: flutter build windows
       
       - name: Archive Release
         uses: thedoctor0/zip-release@master

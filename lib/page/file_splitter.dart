@@ -116,12 +116,6 @@ class _SplitPageState extends State<SplitPage> {
                               status = -1;
                               setState(() {});
 
-                              var instance =
-                                  ShellManager.getInstance("default");
-
-                              instance.runFile("assets/app/main.py",
-                                  echo: true);
-
                               while (true) {
                                 try {
                                   var response = await http.get(
@@ -271,19 +265,6 @@ class _SplitPageState extends State<SplitPage> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    try {
-      Future.delayed(
-        Duration.zero,
-        () async => await http.get(Uri.parse('http://127.0.0.1:55004/stop')),
-      );
-    } catch (_) {
-      debugPrint("Chiusura server non riuscita");
-    }
-    super.dispose();
   }
 }
 
