@@ -26,6 +26,7 @@ class SplitPage extends StatefulWidget {
 class _SplitPageState extends State<SplitPage> {
   File? file;
   int status = 3;
+  String type = "CU";
   String dir = Directory.current.path;
 
   var shell = PythonShell(
@@ -47,7 +48,7 @@ class _SplitPageState extends State<SplitPage> {
     if (status == 1) {
       AlertUtils.showError("A causa di un errore non è possibile procedere");
       return const Center(
-        child: Text("ERRORE NELL AVVIARE IL SERVER  "),
+        child: Text("Non è possibile utilizzare questa funzione al momento..."),
       );
     }
 
@@ -78,79 +79,105 @@ class _SplitPageState extends State<SplitPage> {
                   style: TextStyle(fontSize: 32),
                 ),
                 const SizedBox(height: 45),
-                ElevatedButton(
-                  onPressed: () async {
-                    FilePickerResult? result =
-                        await FilePicker.platform.pickFiles(
-                      allowMultiple: false,
-                      type: FileType.custom,
-                      allowedExtensions: ["pdf"],
-                      dialogTitle: "Seleziona il file",
-                    );
-
-                    if (result != null) {
-                      file = File(result.files.single.path!);
-                      if (CorrectionOcr.correction.isEmpty) {
-                        final response =
-                            await http.get(Uri.parse(AppUrls.ocrFile));
-                        if (response.statusCode == 200) {
-                          CorrectionOcr.fromJson(jsonDecode(response.body));
-                        }
-                      }
-                      try {
-                        await http
-                            .get(Uri.parse('http://127.0.0.1:55004/stop'));
-                      } catch (_) {
-                        debugPrint(
-                            "Il server non è gia spento, shutdown non necessario");
-                      }
-
-                      try {
-                        status = -1;
-                        setState(() {});
-
-                        var instance = ShellManager.getInstance("default");
-                        instance.installRequires(
-                          [
-                            "flask",
-                            "pytesseract",
-                          ],
-                          echo: true,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        FilePickerResult? result =
+                            await FilePicker.platform.pickFiles(
+                          allowMultiple: false,
+                          type: FileType.custom,
+                          allowedExtensions: ["pdf"],
+                          dialogTitle: "Seleziona il file",
                         );
 
-                        instance.runFile("assets/app/main.py", echo: true);
-
-                        while (true) {
-                          try {
-                            var response = await http.get(
-                              Uri.parse('http://127.0.0.1:55004/'),
-                            );
-                            setState(() {
-                              if (response.statusCode == 200) {
-                                debugPrint(response.body.trim());
-                                status = 0;
-                              } else {
-                                status = 1;
-                              }
-                            });
-                            return;
-                          } catch (e) {
-                            debugPrint("Riprovo a chiamare il servizio");
-                            await Future.delayed(
-                              const Duration(milliseconds: 500),
-                            );
+                        if (result != null) {
+                          file = File(result.files.single.path!);
+                          if (CorrectionOcr.correction.isEmpty) {
+                            final response =
+                                await http.get(Uri.parse(AppUrls.ocrFile));
+                            if (response.statusCode == 200) {
+                              CorrectionOcr.fromJson(jsonDecode(response.body));
+                            }
                           }
-                        }
-                      } catch (e) {
-                        setState(() {
-                          status = 1;
-                        });
-                      }
+                          try {
+                            await http
+                                .get(Uri.parse('http://127.0.0.1:55004/stop'));
+                          } catch (_) {
+                            debugPrint(
+                                "Il server non è gia spento, shutdown non necessario");
+                          }
 
-                      setState(() {});
-                    }
-                  },
-                  child: const Text("Segli File"),
+                          try {
+                            status = -1;
+                            setState(() {});
+
+                            var instance = ShellManager.getInstance("default");
+                            instance.installRequires(
+                              [
+                                "flask",
+                                "pytesseract",
+                              ],
+                              echo: true,
+                            );
+
+                            instance.runFile("assets/app/main.py", echo: true);
+
+                            while (true) {
+                              try {
+                                var response = await http.get(
+                                  Uri.parse('http://127.0.0.1:55004/'),
+                                );
+                                setState(() {
+                                  if (response.statusCode == 200) {
+                                    debugPrint(response.body.trim());
+                                    status = 0;
+                                  } else {
+                                    status = 1;
+                                  }
+                                });
+                                return;
+                              } catch (e) {
+                                debugPrint("Riprovo a chiamare il servizio");
+                                await Future.delayed(
+                                  const Duration(milliseconds: 500),
+                                );
+                              }
+                            }
+                          } catch (e) {
+                            setState(() {
+                              status = 1;
+                            });
+                          }
+
+                          setState(() {});
+                        }
+                      },
+                      child: const Text("Segli File"),
+                    ),
+                    const SizedBox(width: 20),
+                    DropdownButton(
+                      value: type,
+                      items: const [
+                        DropdownMenuItem(
+                          value: "CU",
+                          child: Text("Certificazione Unica"),
+                        ),
+                        DropdownMenuItem(
+                          value: "BP",
+                          enabled: false,
+                          child: Text("Busta Paga - COOMING SOON"),
+                        ),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          type = value ?? "CU";
+                        });
+                      },
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 15),
                 Text(
@@ -248,10 +275,14 @@ class _SplitPageState extends State<SplitPage> {
 
   @override
   void dispose() {
-    Future.delayed(
-      Duration.zero,
-      () async => await http.get(Uri.parse('http://127.0.0.1:55004/stop')),
-    );
+    try {
+      Future.delayed(
+        Duration.zero,
+        () async => await http.get(Uri.parse('http://127.0.0.1:55004/stop')),
+      );
+    } catch (_) {
+      debugPrint("Chiusura server non riuscita");
+    }
     super.dispose();
   }
 }
