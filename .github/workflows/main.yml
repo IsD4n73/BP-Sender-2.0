@@ -18,8 +18,8 @@ jobs:
       - name: Enable windows build
         run: flutter config --enable-windows-desktop
 
-      - name: Build flask app
-        run: dart run serious_python:main package assets/app/
+      #- name: Build flask app
+      #  run: dart run serious_python:main package assets/app/
 
       - name: Build artifacts
         run: flutter build windows --release
