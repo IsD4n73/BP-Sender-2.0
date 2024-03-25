@@ -3,7 +3,6 @@ import 'package:buste_paga_sender/controller/settings_controller.dart';
 import 'package:buste_paga_sender/page/home.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-
 import 'common/base_credential.dart';
 
 void main() async {

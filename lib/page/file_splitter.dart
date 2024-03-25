@@ -118,13 +118,6 @@ class _SplitPageState extends State<SplitPage> {
 
                               var instance =
                                   ShellManager.getInstance("default");
-                              instance.installRequires(
-                                [
-                                  "flask",
-                                  "pytesseract",
-                                ],
-                                echo: true,
-                              );
 
                               instance.runFile("assets/app/main.py",
                                   echo: true);
