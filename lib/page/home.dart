@@ -7,6 +7,7 @@ import 'package:buste_paga_sender/page/settings.dart';
 import 'package:buste_paga_sender/page/user_guide.dart';
 import 'package:flutter/material.dart';
 import 'package:side_navigation/side_navigation.dart';
+import '../common/base_credential.dart';
 import 'file_splitter.dart';
 
 class HomePage extends StatefulWidget {
@@ -57,7 +58,9 @@ class _HomePageState extends State<HomePage> {
               title: const Text('3EM'),
               subtitle: const Text('Engineering'),
             ),
-            footer: const SideNavigationBarFooter(label: Text('3em.it')),
+            footer: SideNavigationBarFooter(
+              label: Text('3em.it - v${BaseCredential.packageInfo.version}'),
+            ),
             items: const [
               SideNavigationBarItem(
                 icon: Icons.document_scanner,
