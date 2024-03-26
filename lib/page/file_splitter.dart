@@ -104,23 +104,10 @@ class _SplitPageState extends State<SplitPage> {
                                     jsonDecode(response.body));
                               }
                             }
-                            try {
-                              await http.get(
-                                  Uri.parse('http://127.0.0.1:55004/stop'));
-                            } catch (_) {
-                              debugPrint(
-                                  "Il server non è gia spento, shutdown non necessario");
-                            }
 
                             try {
                               status = -1;
                               setState(() {});
-
-                              var instance =
-                                  ShellManager.getInstance("default");
-
-                              instance.runFile("assets/app/main.py",
-                                  echo: true);
 
                               while (true) {
                                 try {
