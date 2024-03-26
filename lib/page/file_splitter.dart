@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:http/http.dart' as http;
 import 'package:python_shell/python_shell.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import '../common/urls.dart';
 import '../controller/settings_controller.dart';
 
@@ -164,8 +166,9 @@ class _SplitPageState extends State<SplitPage> {
                     ],
                   ),
                   const SizedBox(height: 15),
-                  Text(
-                      "File Selezionato: ${file != null ? basename(file!.path) : ""}"),
+                  file != null
+                      ? Text("File Selezionato: ${basename(file!.path)}")
+                      : const SizedBox.shrink(),
                   const SizedBox(height: 25),
                   status == 0
                       ? ElevatedButton(
@@ -259,19 +262,6 @@ class _SplitPageState extends State<SplitPage> {
       ),
     );
   }
-
-  @override
-  void dispose() {
-    try {
-      Future.delayed(
-        Duration.zero,
-        () async => await http.get(Uri.parse('http://127.0.0.1:55004/stop')),
-      );
-    } catch (_) {
-      debugPrint("Chiusura server non riuscita");
-    }
-    super.dispose();
-  }
 }
 
 showGuideDialog(BuildContext context) {
@@ -295,8 +285,7 @@ showGuideDialog(BuildContext context) {
           const SizedBox(height: 5),
           Linkify(
             onOpen: (link) async {
-              await Clipboard.setData(ClipboardData(text: link.url));
-              AlertUtils.showInfo("Il link è stato copiato");
+              await launchUrlString(link.url);
             },
             text:
                 "1) Scaricare il file da https://github.com/UB-Mannheim/tesseract/wiki",
@@ -304,8 +293,7 @@ showGuideDialog(BuildContext context) {
           const Text("2) Aggiungere Tesseract alle variabili di ambiente"),
           Linkify(
             onOpen: (link) async {
-              await Clipboard.setData(ClipboardData(text: link.url));
-              AlertUtils.showInfo("Il link è stato copiato");
+              await launchUrlString(link.url);
             },
             text: "3) Scaricare python da https://www.python.org/downloads/",
           ),
@@ -319,10 +307,11 @@ showGuideDialog(BuildContext context) {
           const SizedBox(height: 5),
           const Text(
               "1) Selezionare un file cliccando sul pulsante 'Seleziona File'"),
+          const Text("2) Selezionare la tipologia del documento caricato'"),
           const Text(
-              "2) Cliccare sul pulsante 'Avvia' e attendere il completamento"),
+              "3) Cliccare sul pulsante 'Avvia' e attendere il completamento"),
           const Text(
-              "3) I PDF divisi saranno nella cartella 'Splitted' dove si trova il file principale"),
+              "4) I PDF divisi saranno nella cartella 'Splitted' dove si trova il file principale"),
           const SizedBox(height: 5),
           const Divider(),
         ],
