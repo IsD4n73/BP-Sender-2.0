@@ -11,12 +11,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:http/http.dart' as http;
 import 'package:python_shell/python_shell.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../common/urls.dart';
 import '../controller/settings_controller.dart';
 
-TextEditingController namesController = TextEditingController();
+ValueNotifier<TextEditingController> namesController =
+    ValueNotifier<TextEditingController>(TextEditingController());
 
 class SplitPage extends StatefulWidget {
   const SplitPage({super.key});
@@ -40,7 +41,7 @@ class _SplitPageState extends State<SplitPage> {
     setState(() {
       file = null;
       status = 3;
-      namesController.clear();
+      namesController.value.clear();
     });
     super.initState();
   }
@@ -183,6 +184,7 @@ class _SplitPageState extends State<SplitPage> {
                                     AlertUtils.showSuccess(
                                         "La creazione di file separati è andata a buon fine!");
                                   } catch (e) {
+                                    debugPrint(e.toString());
                                     AlertUtils.showError(
                                         "Non è possibile dividere questo PDF, riprova.");
                                   } finally {
@@ -197,20 +199,23 @@ class _SplitPageState extends State<SplitPage> {
                   const SizedBox(height: 25),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                      controller: namesController,
-                      maxLines: 10,
-                      readOnly: true,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'LOG',
+                    child: ValueListenableBuilder<TextEditingController>(
+                      valueListenable: namesController,
+                      builder: (context, value, child) => TextField(
+                        controller: value,
+                        maxLines: 10,
+                        readOnly: true,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'LOG',
+                        ),
                       ),
                     ),
                   ),
                   Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
-                      onPressed: namesController.text.isEmpty
+                      onPressed: namesController.value.text.isEmpty
                           ? null
                           : () async {
                               DateTime currentDate = DateTime.now();
@@ -225,7 +230,8 @@ class _SplitPageState extends State<SplitPage> {
                                         "NULL";
                                 if (dir != "NULL") {
                                   try {
-                                    String completeLog = namesController.text;
+                                    String completeLog =
+                                        namesController.value.text;
 
                                     final File file = File(
                                         '$dir/log-${currentDate.day}-${currentDate.month}-${currentDate.year}-${currentDate.second}.txt');
@@ -241,8 +247,8 @@ class _SplitPageState extends State<SplitPage> {
                                 try {
                                   final File file = File(
                                       '$dir/log-${currentDate.day}-${currentDate.month}-${currentDate.year}-${currentDate.second}.txt');
-                                  await file
-                                      .writeAsString(namesController.text);
+                                  await file.writeAsString(
+                                      namesController.value.text);
                                   AlertUtils.showSuccess(
                                       "Il file è stato salvato in $dir");
                                 } catch (_) {

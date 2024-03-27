@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:isolate';
 import 'dart:math';
 import 'package:buste_paga_sender/model/correction_ocr.dart';
 import 'package:buste_paga_sender/page/file_splitter.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
@@ -19,33 +21,41 @@ Future<void> createSplittedDir(String dir) async {
 
 // split file to multiple
 Future<void> splitFile(File file) async {
-  namesController.text = "\n======== INIZIO ========\n\n";
+  namesController.value.text = "\n======== INIZIO ========\n\n";
   var bytes = await file.readAsBytes();
 
-  namesController.text +=
-      "\n[INFO] ==> Dimensione del documento: ${getFileSizeString(bytes.size)}";
-  
+  namesController.value.text +=
+      "\n[INFO] ==> Dimensione del documento: ${getFileSizeString(bytes: bytes.lengthInBytes, decimals: 2)}";
+
   final PdfDocument document = PdfDocument(inputBytes: bytes);
-  //document.security.permissions.addAll(PdfPermissionsFlags.values);
+
+  namesController.value.text +=
+      "\n[INFO] ==> Pagine del documento: ${document.pages.count}";
+  debugPrint("TOT PAG: ${document.pages.count}");
 
   PdfTextExtractor extractor = PdfTextExtractor(document);
 
-  var find = extractor
+  var find = await compute((ext) {
+    return ext
+        .extractTextLines()
+        .where((element) => element.text.contains("CERTIFICAZIONE DI CUI"))
+        .toList();
+  }, extractor);
+
+  /*var find = extractor
       .extractTextLines()
       .where((element) => element.text.contains("CERTIFICAZIONE DI CUI"))
-      .toList();
+      .toList();*/
 
   int fileToGenerate = find.length;
   if (fileToGenerate < 1) {
-    throw const FormatException("fileToGenerate è < 1");
+    throw FormatException("fileToGenerate è:  $fileToGenerate");
   }
 
   int doneFile = 0;
-  debugPrint("TOT PAG: ${document.pages.count}");
   debugPrint("FILE GEN: $fileToGenerate");
-  namesController.text +=
-      "\n[INFO] ==> Pagine del documento: ${document.pages.count}";
-  namesController.text += "\n[INFO] ==> File da generare: $fileToGenerate\n\n";
+  namesController.value.text +=
+      "\n[INFO] ==> File da generare: $fileToGenerate\n\n";
 
   PdfDocument splittedPdf = PdfDocument();
   splittedPdf.pageSettings.margins.all = 0;
@@ -79,7 +89,7 @@ Future<void> splitFile(File file) async {
 
       /* IMAGE TO EXTRACT */
       var rasterPdf = await Printing.raster(
-        tmpFile.readAsBytesSync(),
+        await tmpFile.readAsBytes(),
         pages: [0],
         dpi: 400,
       ).first;
@@ -104,10 +114,10 @@ Future<void> splitFile(File file) async {
           return false;
         });
         debugPrint("NOME TROVATO: $nameFound");
-        tmpFile.renameSync(
+        await tmpFile.rename(
           tmpFile.path.replaceAll("$fileToGenerate", nameFound),
         );
-        namesController.text +=
+        namesController.value.text +=
             "\n[INFO] ==> File generato correttamente con nome: $nameFound";
       }
 
@@ -120,11 +130,11 @@ Future<void> splitFile(File file) async {
     }
   }
   document.dispose();
-  namesController.text += "\n\n======== FINE ========\n";
+  namesController.value.text += "\n\n======== FINE ========\n";
 }
 
 String getFileSizeString({required int bytes, int decimals = 2}) {
-  const suffixes = ["b", "kb", "mb", "gb", "tb"];
+  const suffixes = [" B", " KB", " MB", " GB", " TB"];
   if (bytes == 0) return '0${suffixes[0]}';
   var i = (log(bytes) / log(1024)).floor();
   return ((bytes / pow(1024, i)).toStringAsFixed(decimals)) + suffixes[i];

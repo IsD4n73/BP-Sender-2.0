@@ -1,7 +1,6 @@
 import 'package:buste_paga_sender/common/alerts.dart';
 import 'package:buste_paga_sender/page/account.dart';
 import 'package:buste_paga_sender/page/bulk_sender.dart';
-import 'package:buste_paga_sender/page/calendar.dart';
 import 'package:buste_paga_sender/page/mail_list.dart';
 import 'package:buste_paga_sender/page/sender.dart';
 import 'package:buste_paga_sender/page/settings.dart';
@@ -51,13 +50,26 @@ class _HomePageState extends State<HomePage> {
         ],
         echo: true,
       );
+
       try {
         await http.get(Uri.parse('http://127.0.0.1:55004/stop'));
       } catch (_) {
         debugPrint("Chiusura server non necessaria");
       }
 
-      instance.runFile("assets/app/main.py", echo: true);
+      instance.runString(
+        python,
+        echo: true,
+        listener: ShellListener(
+          onError: (p0, p1) {
+            AlertUtils.showError(p1.toString());
+          },
+          onMessage: (p0) {
+            debugPrint(p0);
+            //AlertUtils.showInfo(p0);
+          },
+        ),
+      );
       setState(() {
         allDepLoaded = true;
       });
