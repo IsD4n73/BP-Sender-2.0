@@ -1,6 +1,7 @@
 import 'package:buste_paga_sender/common/alerts.dart';
 import 'package:buste_paga_sender/page/account.dart';
 import 'package:buste_paga_sender/page/bulk_sender.dart';
+import 'package:buste_paga_sender/page/calendar.dart';
 import 'package:buste_paga_sender/page/mail_list.dart';
 import 'package:buste_paga_sender/page/sender.dart';
 import 'package:buste_paga_sender/page/settings.dart';
@@ -10,6 +11,7 @@ import 'package:python_shell/python_shell.dart';
 import 'package:side_navigation/side_navigation.dart';
 import '../common/base_credential.dart';
 import 'file_splitter.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -35,11 +37,12 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     AlertUtils.checkUpgrade();
+
     var shell = PythonShell(
       PythonShellConfig(),
     );
 
-    shell.initialize().then((value) {
+    shell.initialize().then((value) async {
       var instance = ShellManager.getInstance("default");
       instance.installRequires(
         [
@@ -48,26 +51,13 @@ class _HomePageState extends State<HomePage> {
         ],
         echo: true,
       );
-
-      //instance.runFile("assets/app/main.py", echo: true);
       try {
-        instance.runString(
-          python,
-          echo: true,
-          listener: ShellListener(
-            onError: (p0, p1) {
-              AlertUtils.showError(p1.toString());
-            },
-            onMessage: (p0) {
-              debugPrint(p0);
-              //AlertUtils.showInfo(p0);
-            },
-          ),
-        );
-      } catch (e) {
-        AlertUtils.showError(e.toString());
+        await http.get(Uri.parse('http://127.0.0.1:55004/stop'));
+      } catch (_) {
+        debugPrint("Chiusura server non necessaria");
       }
 
+      instance.runFile("assets/app/main.py", echo: true);
       setState(() {
         allDepLoaded = true;
       });

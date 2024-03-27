@@ -4,6 +4,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:buste_paga_sender/common/urls.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:version/version.dart';
@@ -27,22 +28,32 @@ class AlertUtils {
               left: BorderSide(width: 5, color: Colors.blue),
             ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                "Informazione",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
+              Lottie.asset(
+                'assets/animations/info-animation.json',
+                height: 50,
+                width: 50,
               ),
-              Text(
-                text,
-                style: const TextStyle(
-                  color: Colors.black,
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    "Informazione",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    text,
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -69,22 +80,32 @@ class AlertUtils {
               left: BorderSide(width: 5, color: Colors.green),
             ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                "Successo",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
+              Lottie.asset(
+                'assets/animations/ok-animation.json',
+                height: 50,
+                width: 50,
               ),
-              Text(
-                text,
-                style: const TextStyle(
-                  color: Colors.black,
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    "Successo",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    text,
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -111,22 +132,32 @@ class AlertUtils {
               left: BorderSide(width: 5, color: Colors.red),
             ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                "Errore",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
+              Lottie.asset(
+                'assets/animations/error-animation.json',
+                height: 50,
+                width: 50,
               ),
-              Text(
-                text,
-                style: const TextStyle(
-                  color: Colors.black,
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    "Errore",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    text,
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
