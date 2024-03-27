@@ -20,6 +20,10 @@ Future<void> createSplittedDir(String dir) async {
 Future<void> splitFile(File file) async {
   namesController.text = "\n======== INIZIO ========\n\n";
   var bytes = await file.readAsBytes();
+
+  namesController.text +=
+      "\n[INFO] ==> Dimensione del documento: ${getFileSizeString(bytes.size)}";
+  
   final PdfDocument document = PdfDocument(inputBytes: bytes);
   //document.security.permissions.addAll(PdfPermissionsFlags.values);
 
@@ -116,4 +120,11 @@ Future<void> splitFile(File file) async {
   }
   document.dispose();
   namesController.text += "\n\n======== FINE ========\n";
+}
+
+String getFileSizeString({required int bytes, int decimals = 2}) {
+  const suffixes = ["b", "kb", "mb", "gb", "tb"];
+  if (bytes == 0) return '0${suffixes[0]}';
+  var i = (log(bytes) / log(1024)).floor();
+  return ((bytes / pow(1024, i)).toStringAsFixed(decimals)) + suffixes[i];
 }
