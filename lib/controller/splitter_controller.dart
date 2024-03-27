@@ -21,7 +21,7 @@ Future<void> splitFile(File file) async {
   namesController.text = "\n======== INIZIO ========\n\n";
   var bytes = await file.readAsBytes();
   final PdfDocument document = PdfDocument(inputBytes: bytes);
-  document.security.permissions.addAll(PdfPermissionsFlags.values);
+  //document.security.permissions.addAll(PdfPermissionsFlags.values);
 
   PdfTextExtractor extractor = PdfTextExtractor(document);
 
