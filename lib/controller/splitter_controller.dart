@@ -114,9 +114,8 @@ Future<void> splitFile(File file) async {
           return false;
         });
         debugPrint("NOME TROVATO: $nameFound");
-        await tmpFile.rename(
-          tmpFile.path.replaceAll("$fileToGenerate", nameFound),
-        );
+        await renameFile(tmpFile, fileToGenerate.toString(), nameFound);
+
         namesController.value.text +=
             "\n[INFO] ==> File generato correttamente con nome: $nameFound";
       }
@@ -138,4 +137,25 @@ String getFileSizeString({required int bytes, int decimals = 2}) {
   if (bytes == 0) return '0${suffixes[0]}';
   var i = (log(bytes) / log(1024)).floor();
   return ((bytes / pow(1024, i)).toStringAsFixed(decimals)) + suffixes[i];
+}
+
+Future<void> renameFile(File baseFile, String replace, String nome) async {
+  if (File(baseFile.path.replaceAll(replace, nome)).existsSync()) {
+    int fileGiaEsistenti = 0;
+    while (true) {
+      File nextFilePath = File(
+          "${baseFile.parent.path}/$nome - Certificazione Unica ${fileGiaEsistenti + 1}.pdf");
+
+      if (!await nextFilePath.exists()) {
+        await baseFile.rename(nextFilePath.path);
+        return;
+      } else {
+        fileGiaEsistenti++;
+      }
+    }
+  } else {
+    await baseFile.rename(
+      baseFile.path.replaceAll(replace, nome),
+    );
+  }
 }
