@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:http/http.dart' as http;
 import 'package:python_shell/python_shell.dart';
-import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../common/urls.dart';
 import '../controller/settings_controller.dart';
