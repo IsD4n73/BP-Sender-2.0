@@ -40,4 +40,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: "rel"
-          files: build/windows/x64/runner/Release/BP-Sender-${{github.ref_name}}-windows.zip
+          files: |
+            build/windows/x64/runner/Release/BP-Sender-${{github.ref_name}}-windows.zip
+            build/windows/Buste Paga 2.0 Installer.exe
