@@ -30,6 +30,9 @@ jobs:
           type: 'zip'
           filename: BP-Sender-${{github.ref_name}}-windows.zip
           directory: build/windows/x64/runner/Release
+
+      - name: Build installer
+        run: dart windows_installer_creator.dart
       
       - name: Windows Release
         uses: softprops/action-gh-release@v1
