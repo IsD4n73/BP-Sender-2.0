@@ -29,6 +29,9 @@ void main() {
       File('assets/resource/logo.ico'),
     ),
     runAfterInstall: false,
+    compression: InnoSetupCompressions().lzma2(
+      InnoSetupCompressionLevel.ultra64,
+    ),
     languages: [
       InnoSetupLanguages().italian,
     ],
