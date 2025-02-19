@@ -35,9 +35,7 @@ jobs:
         run: dart windows_installer_creator.dart
       
       - name: Windows Release
-        uses: softprops/action-gh-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: "rel"
           files: |
