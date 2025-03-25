@@ -15,6 +15,7 @@ Future<void> createSplittedDir(String dir) async {
   if ((await path.exists())) {
   } else {
     path.create();
+    namesController.value.text += "\n[INFO] ==> Cartella splitted creata";
   }
 }
 
@@ -105,6 +106,8 @@ Future<void> splitFile(File file) async {
         CorrectionOcr.correction.any((e) {
           if (nameFound.contains(e.ocr.toUpperCase())) {
             debugPrint("Correzione effettuata ${e.ocr} -> ${e.name}");
+            namesController.value.text +=
+                "\n[INFO] ==> Correzione effettuata ${e.ocr} -> ${e.name}";
             nameFound = nameFound.replaceAll(
               e.ocr.toUpperCase(),
               e.name.toUpperCase(),

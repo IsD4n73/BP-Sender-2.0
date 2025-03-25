@@ -45,15 +45,15 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos
 
 SPEC CHECKSUMS:
-  device_info_plus: 1b14eed9bf95428983aed283a8d51cce3d8c4215
-  file_picker: e716a70a9fe5fd9e09ebc922d7541464289443af
+  device_info_plus: 4fb280989f669696856f8b129e4a5e3cd6c48f76
+  file_picker: 7584aae6fa07a041af2b36a2655122d42f578c1a
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
-  package_info_plus: 12f1c5c2cfe8727ca46cbd0b26677728972d9a5b
-  printing: 1dd6a1fce2209ec240698e2439a4adbb9b427637
-  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
-  syncfusion_pdfviewer_macos: e9194851581cad04b28b53913d0636d39a4ed4b2
-  url_launcher_macos: 5f437abeda8c85500ceb03f5c1938a8c5a705399
+  package_info_plus: f0052d280d17aa382b932f399edf32507174e870
+  printing: c4cf83c78fd684f9bc318e6aadc18972aa48f617
+  shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
+  syncfusion_pdfviewer_macos: 94d2eafcb3475d32309d4ba282ef02dc75fd682f
+  url_launcher_macos: de10e46d8d8b9e3a7b8a133e8de92b104379f05e
 
 PODFILE CHECKSUM: 9ebaf0ce3d369aaa26a9ea0e159195ed94724cf3
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2

@@ -96,7 +96,11 @@ class _SplitPageState extends State<SplitPage> {
                             dialogTitle: "Seleziona il file",
                           );
 
+                          namesController.value.clear();
+
                           if (result != null) {
+                            namesController.value.text +=
+                                "\n[INFO] ==> File preso correttamente";
                             file = File(result.files.single.path!);
                             if (CorrectionOcr.correction.isEmpty) {
                               final response =
@@ -104,6 +108,8 @@ class _SplitPageState extends State<SplitPage> {
                               if (response.statusCode == 200) {
                                 CorrectionOcr.fromJson(
                                     jsonDecode(response.body));
+                                namesController.value.text +=
+                                    "\n[INFO] ==> Correzioni caricate correttamente";
                               }
                             }
 
@@ -119,6 +125,8 @@ class _SplitPageState extends State<SplitPage> {
                                   setState(() {
                                     if (response.statusCode == 200) {
                                       debugPrint(response.body.trim());
+                                      namesController.value.text +=
+                                          "\n[INFO] ==> Servizio riconoscimento online, app pronta ad iniziare";
                                       status = 0;
                                     } else {
                                       status = 1;
@@ -127,12 +135,16 @@ class _SplitPageState extends State<SplitPage> {
                                   return;
                                 } catch (e) {
                                   debugPrint("Riprovo a chiamare il servizio");
+                                  namesController.value.text +=
+                                      "\n[VERBOSE] ==> Servizio NON online, riprovo...";
                                   await Future.delayed(
                                     const Duration(milliseconds: 500),
                                   );
                                 }
                               }
                             } catch (e) {
+                              namesController.value.text +=
+                                  "\n[ERROR] ==> ${e.toString()}";
                               setState(() {
                                 status = 1;
                               });
