@@ -12,6 +12,7 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:http/http.dart' as http;
 import 'package:python_shell/python_shell.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import '../common/python_script.dart';
 import '../common/urls.dart';
 import '../controller/settings_controller.dart';
 
@@ -27,7 +28,7 @@ class SplitPage extends StatefulWidget {
 
 class _SplitPageState extends State<SplitPage> {
   File? file;
-  int status = 3;
+  int status = -2;
   String type = "CU";
   String dir = Directory.current.path;
 
@@ -39,9 +40,49 @@ class _SplitPageState extends State<SplitPage> {
   void initState() {
     setState(() {
       file = null;
-      status = 3;
+      status = -2;
       namesController.value.clear();
     });
+
+    Future.delayed(
+      Duration.zero,
+      () async {
+        await shell.initialize();
+        var instance = ShellManager.getInstance("default");
+        instance.installRequires(
+          [
+            "flask",
+            "pytesseract",
+          ],
+          echo: true,
+        );
+
+        try {
+          await http.get(Uri.parse('http://127.0.0.1:55004/stop'));
+        } catch (_) {
+          debugPrint("Chiusura server non necessaria");
+        }
+
+        instance.runString(
+          python,
+          echo: true,
+          listener: ShellListener(
+            onError: (p0, p1) {
+              AlertUtils.showError(p1.toString());
+            },
+            onMessage: (p0) {
+              debugPrint("ONMESSAGE: $p0");
+              if (p0.contains("Serving Flask app")) {
+                setState(() {
+                  status = 3;
+                });
+              }
+            },
+          ),
+        );
+      },
+    );
+
     super.initState();
   }
 
@@ -51,6 +92,25 @@ class _SplitPageState extends State<SplitPage> {
       AlertUtils.showError("A causa di un errore non è possibile procedere");
       return const Center(
         child: Text("Non è possibile utilizzare questa funzione al momento..."),
+      );
+    }
+
+    if (status == -2) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircularProgressIndicator(),
+          SizedBox(height: 10),
+          Text(
+            "Attendere...",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 10),
+          Text("Download dei file necessari in corso"),
+        ],
       );
     }
 
@@ -115,9 +175,10 @@ class _SplitPageState extends State<SplitPage> {
 
                             try {
                               status = -1;
+                              int attempt = 0;
                               setState(() {});
 
-                              while (true) {
+                              while (attempt == 100) {
                                 try {
                                   var response = await http.get(
                                     Uri.parse('http://127.0.0.1:55004/'),
@@ -140,11 +201,13 @@ class _SplitPageState extends State<SplitPage> {
                                   await Future.delayed(
                                     const Duration(milliseconds: 500),
                                   );
+                                } finally {
+                                  attempt++;
                                 }
                               }
                             } catch (e) {
                               namesController.value.text +=
-                                  "\n[ERROR] ==> ${e.toString()}";
+                                  "\n[ERRORE] ==> ${e.toString()}";
                               setState(() {
                                 status = 1;
                               });

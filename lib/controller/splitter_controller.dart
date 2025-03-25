@@ -78,6 +78,9 @@ Future<void> splitFile(File file) async {
     }
 
     if (i == pageOfFinish) {
+      namesController.value.text +=
+          "\n[INFO] ==>File completo, salvataggio in corso...";
+
       var tmpByte = await splittedPdf.save();
 
       File tmpFile = File(
@@ -86,6 +89,9 @@ Future<void> splitFile(File file) async {
         await tmpFile.create(recursive: true);
       }
       await tmpFile.writeAsBytes(tmpByte);
+
+      namesController.value.text +=
+          "\n[INFO] ==> File salvato correttamente, inizio estrazione nome...";
 
       /* IMAGE TO EXTRACT */
       var rasterPdf = await Printing.raster(
@@ -116,10 +122,14 @@ Future<void> splitFile(File file) async {
           return false;
         });
         debugPrint("NOME TROVATO: $nameFound");
+
         await renameFile(tmpFile, fileToGenerate.toString(), nameFound);
 
         namesController.value.text +=
-            "\n[INFO] ==> File generato correttamente con nome: $nameFound";
+            "\n[INFO] ==> File generato correttamente con nome: $nameFound\n\n";
+      } else {
+        namesController.value.text +=
+            "\n[ERRORE] ==> Il servizio ha risposto con ${response.statusCode} :::: ${response.body}\n\n";
       }
 
       /* ============= */
