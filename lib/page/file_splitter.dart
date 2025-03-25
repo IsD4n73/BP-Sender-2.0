@@ -110,6 +110,18 @@ class _SplitPageState extends State<SplitPage> {
           ),
           SizedBox(height: 10),
           Text("Download dei file necessari in corso"),
+          SizedBox(height: 50),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              minimumSize: Size(MediaQuery.of(context).size.height / 2, 50),
+            ),
+            onPressed: () {
+              showGuideDialog(context);
+            },
+            child: const Text(
+              "Guida",
+            ),
+          ),
         ],
       );
     }
