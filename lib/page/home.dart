@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
             AlertUtils.showError(p1.toString());
           },
           onMessage: (p0) {
-            debugPrint(p0);
+            debugPrint("ONMESSAGE: $p0");
             //AlertUtils.showInfo(p0);
           },
         ),
