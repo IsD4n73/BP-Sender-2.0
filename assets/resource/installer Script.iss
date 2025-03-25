@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Buste Paga 2.0"
-#define MyAppVersion "2.5.0"
+#define MyAppVersion "2.6.1"
 #define MyAppPublisher "3EM"
 #define MyAppURL "https://3em.it/"
 #define MyAppExeName "buste_paga_sender.exe"
