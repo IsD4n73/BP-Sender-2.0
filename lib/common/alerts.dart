@@ -11,7 +11,7 @@ import 'package:version/version.dart';
 
 class AlertUtils {
   static void showInfo(String text) {
-    var cancel = BotToast.showCustomNotification(
+    BotToast.showCustomNotification(
       enableSlideOff: true,
       onlyOne: true,
       crossPage: false,
@@ -63,7 +63,7 @@ class AlertUtils {
   }
 
   static void showSuccess(String text) {
-    var cancel = BotToast.showCustomNotification(
+    BotToast.showCustomNotification(
       enableSlideOff: true,
       onlyOne: true,
       crossPage: false,
@@ -115,7 +115,7 @@ class AlertUtils {
   }
 
   static void showError(String text) {
-    var cancel = BotToast.showCustomNotification(
+    BotToast.showCustomNotification(
       enableSlideOff: true,
       onlyOne: true,
       crossPage: false,
@@ -182,7 +182,7 @@ class AlertUtils {
       return;
     }
 
-    var cancel = BotToast.showCustomNotification(
+    BotToast.showCustomNotification(
       enableSlideOff: true,
       onlyOne: true,
       crossPage: true,

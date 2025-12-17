@@ -6,12 +6,9 @@ import 'package:buste_paga_sender/page/sender.dart';
 import 'package:buste_paga_sender/page/settings.dart';
 import 'package:buste_paga_sender/page/user_guide.dart';
 import 'package:flutter/material.dart';
-import 'package:python_shell/python_shell.dart';
 import 'package:side_navigation/side_navigation.dart';
 import '../common/base_credential.dart';
-import '../common/python_script.dart';
 import 'file_splitter.dart';
-import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
