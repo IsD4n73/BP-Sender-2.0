@@ -47,7 +47,7 @@ Future<void> getSavedAdvanced() async {
 // get the saved mail text
 Future<void> getSavedMailText() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  final String mailtext = prefs.getString('bp-mailtext') ?? AppConfig.msg;
+  final String mailtext = prefs.getString('bp-mailtext-html') ?? AppConfig.msg;
 
   AppConfig.msg = mailtext;
 }
@@ -141,7 +141,7 @@ Future<void> saveTheme(String theme) async {
 // save text mail
 Future<void> saveMailText(String mailText) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setString('bp-mailtext', mailText.replaceAll("\n", "<br>"));
+  await prefs.setString('bp-mailtext-html', mailText.replaceAll("\n", "<br>"));
 }
 
 // format the mail body

@@ -13,6 +13,7 @@ class _AccountPageState extends State<AccountPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController pswController = TextEditingController();
   TextEditingController userController = TextEditingController();
+  bool showPsw = false;
 
   @override
   void initState() {
@@ -60,9 +61,17 @@ class _AccountPageState extends State<AccountPage> {
             const SizedBox(height: 20),
             TextField(
               controller: pswController,
-              obscureText: true,
-              decoration: const InputDecoration(
+              obscureText: !showPsw,
+              decoration: InputDecoration(
                 border: OutlineInputBorder(),
+                suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        showPsw = !showPsw;
+                      });
+                    },
+                    icon: Icon(
+                        showPsw ? Icons.visibility : Icons.visibility_off)),
                 labelText: 'Password SMTP',
               ),
             ),

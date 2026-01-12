@@ -25,11 +25,11 @@ Grazie per la collaborazione e saluti
 
 
 
-Francesca scarmozzino
+Francesca Scarmozzino
 
 <sub style='color:grey;'>Finance & Administration
 
-<img src='http://parking3em.altervista.org/firma_logo.png' width='80' height='80'>
+<img src='https://www.3em.it/assets/img/blu.svg' width='80' height='80'>
 
 Via Antiniana, 2/G
 80078 Pozzuoli (NA)

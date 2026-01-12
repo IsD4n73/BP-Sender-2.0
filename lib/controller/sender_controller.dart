@@ -1,11 +1,10 @@
 import 'dart:io';
-
+import 'package:enough_mail/enough_mail.dart';
 import 'package:buste_paga_sender/controller/files_controller.dart';
 import 'package:buste_paga_sender/controller/mail_list_controller.dart';
 import 'package:buste_paga_sender/page/sender.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
-
 import '../common/smtp_configuration.dart';
 import '../model/account_model.dart';
 import 'account_controller.dart';
@@ -59,28 +58,65 @@ Future<void> sendEmails(String dir) async {
 Future<bool> sendMail(
     String email, String oggetto, String nome, String dir, String file) async {
   AccountModel account = await getSavedAccount();
-  List<Attachment>? attachmentFile;
-
-  if (await File("$dir\\$file").exists()) {
-    attachmentFile = [
-      FileAttachment(
-        File("$dir\\$file"),
-      )..location = Location.attachment,
-    ];
-  }
-
   if (account.email != null && account.password != null) {
-    final message = Message()
-      ..from = Address(account.email!)
-      ..recipients.add(email)
-      ..subject = oggetto
-      ..html = AppConfig.msg;
-
-    if (attachmentFile != null && AppConfig.sendFile) {
-      message.attachments = attachmentFile;
-    }
-
     try {
+      final client = SmtpClient("3em.it", isLogEnabled: true);
+
+      await client.connectToServer(AppConfig.host, AppConfig.port,
+          isSecure: false);
+      await client.ehlo();
+      if (client.serverInfo.supportsAuth(AuthMechanism.plain)) {
+        await client.authenticate(
+            account.user!, account.password!, AuthMechanism.plain);
+      } else if (client.serverInfo.supportsAuth(AuthMechanism.login)) {
+        await client.authenticate(
+            account.user!, account.password!, AuthMechanism.login);
+      } else {
+        return true;
+      }
+
+      final builder = MessageBuilder.prepareMultipartAlternativeMessage(
+        plainText: AppConfig.msg,
+        htmlText: AppConfig.msg,
+      )
+        ..from = [MailAddress(null, account.email!)]
+        ..to = [MailAddress(null, email)]
+        ..subject = oggetto;
+
+      var fileExist = await File("$dir\\$file").exists();
+      if (fileExist && AppConfig.sendFile) {
+        await builder.addFile(
+            File("$dir\\$file"), MediaSubtype.applicationPdf.mediaType);
+      }
+
+      final mimeMessage = builder.buildMimeMessage();
+      final sendResponse = await client.sendMessage(mimeMessage);
+
+      logController.text += "[INVIO] ==> Email inviata a $email ($nome)\n";
+      sendController.text += "$nome\n";
+      return sendResponse.isFailedStatus;
+
+      /*List<Attachment>? attachmentFile;
+
+      if (await File("$dir\\$file").exists()) {
+        attachmentFile = [
+          FileAttachment(
+            File("$dir\\$file"),
+          )..location = Location.attachment,
+        ];
+      }
+
+
+      final message = Message()
+        ..from = Address(account.email!)
+        ..recipients.add(email)
+        ..subject = oggetto
+        ..html = AppConfig.msg;
+
+      if (attachmentFile != null && AppConfig.sendFile) {
+        message.attachments = attachmentFile;
+      }
+
       await send(
         message,
         SmtpServer(
@@ -94,9 +130,10 @@ Future<bool> sendMail(
       );
       logController.text += "[INVIO] ==> Email inviata a $email ($nome)\n";
       sendController.text += "$nome\n";
-      return false;
-    } on MailerException {
+      return false;*/
+    } catch (e) {
       logController.text += "[ERRORE] ==> Email non inviata a $email ($nome)\n";
+      print(e);
       return true;
     }
   }
