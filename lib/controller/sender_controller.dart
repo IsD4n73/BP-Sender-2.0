@@ -3,8 +3,6 @@ import 'package:enough_mail/enough_mail.dart';
 import 'package:buste_paga_sender/controller/files_controller.dart';
 import 'package:buste_paga_sender/controller/mail_list_controller.dart';
 import 'package:buste_paga_sender/page/sender.dart';
-import 'package:mailer/mailer.dart';
-import 'package:mailer/smtp_server.dart';
 import '../common/smtp_configuration.dart';
 import '../model/account_model.dart';
 import 'account_controller.dart';
@@ -60,10 +58,15 @@ Future<bool> sendMail(
   AccountModel account = await getSavedAccount();
   if (account.email != null && account.password != null) {
     try {
-      final client = SmtpClient("3em.it", isLogEnabled: true);
+      final client = SmtpClient(
+        "3em.it",
+        isLogEnabled: true,
+      );
 
-      await client.connectToServer(AppConfig.host, AppConfig.port,
-          isSecure: false);
+      var host = await getSavedHost();
+      var port = await getSavedPort();
+
+      await client.connectToServer(host, port, isSecure: true);
       await client.ehlo();
       if (client.serverInfo.supportsAuth(AuthMechanism.plain)) {
         await client.authenticate(

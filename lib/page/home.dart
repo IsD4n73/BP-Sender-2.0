@@ -1,6 +1,5 @@
 import 'package:buste_paga_sender/common/alerts.dart';
 import 'package:buste_paga_sender/page/account.dart';
-import 'package:buste_paga_sender/page/bulk_sender.dart';
 import 'package:buste_paga_sender/page/mail_list.dart';
 import 'package:buste_paga_sender/page/sender.dart';
 import 'package:buste_paga_sender/page/settings.dart';
@@ -20,7 +19,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<Widget> views = const [
     SenderPage(),
-    BulkSenderPage(),
+    //BulkSenderPage(),
     AccountPage(),
     MailListPage(),
     SplitPage(),
@@ -67,10 +66,9 @@ class _HomePageState extends State<HomePage> {
                 icon: Icons.document_scanner,
                 label: 'Home',
               ),
-              SideNavigationBarItem(
-                icon: Icons.alternate_email,
+              /*  icon: Icons.alternate_email,
                 label: 'Invio a Mail List',
-              ),
+              ),*/
               SideNavigationBarItem(
                 icon: Icons.person,
                 label: 'Account',

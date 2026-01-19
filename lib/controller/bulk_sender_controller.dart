@@ -1,7 +1,6 @@
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 
-import '../common/smtp_configuration.dart';
 import '../model/account_model.dart';
 import '../model/maillist_model.dart';
 import '../page/bulk_sender.dart';
@@ -24,14 +23,17 @@ Future<void> sendBulkEmails(
     message.bccRecipients.add(mail.email);
   }
 
+  var host = await getSavedHost();
+  var port = await getSavedPort();
+
   try {
     await send(
       message,
       SmtpServer(
-        AppConfig.host,
+        host,
         password: account.password!,
         username: account.user!,
-        port: AppConfig.port,
+        port: port,
         allowInsecure: true,
         ignoreBadCertificate: true,
       ),

@@ -1,6 +1,6 @@
 class AppConfig {
-  static String host = "authsmtp.3em.it";
-  static int port = 25;
+  static String baseHost = "smtp.office365.com";
+  static int basePort = 587;
 
   static int oggettoIndex = 1;
   static int nameIndex = 2;

@@ -1,6 +1,7 @@
 import 'package:buste_paga_sender/common/alerts.dart';
 import 'package:buste_paga_sender/controller/account_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -13,6 +14,8 @@ class _AccountPageState extends State<AccountPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController pswController = TextEditingController();
   TextEditingController userController = TextEditingController();
+  TextEditingController smtpController = TextEditingController();
+  TextEditingController portController = TextEditingController();
   bool showPsw = false;
 
   @override
@@ -27,6 +30,18 @@ class _AccountPageState extends State<AccountPage> {
         userController.text = value.user ?? "";
       });
     });
+
+    getSavedHost().then((value) {
+      setState(() {
+        smtpController.text = value;
+      });
+    });
+
+    getSavedPort().then(
+      (value) {
+        portController.text = value.toString();
+      },
+    );
   }
 
   @override
@@ -43,11 +58,41 @@ class _AccountPageState extends State<AccountPage> {
               style: TextStyle(fontSize: 32),
             ),
             const SizedBox(height: 25),
+            Row(
+              children: [
+                Expanded(
+                  flex: 5,
+                  child: TextField(
+                    controller: smtpController,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Host SMTP',
+                    ),
+                  ),
+                ),
+                SizedBox(width: 20),
+                Expanded(
+                  flex: 1,
+                  child: TextField(
+                    controller: portController,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Porta SMTP',
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
             TextField(
               controller: emailController,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: 'Email',
+                labelText: 'Email che invia',
               ),
             ),
             const SizedBox(height: 20),
@@ -81,9 +126,13 @@ class _AccountPageState extends State<AccountPage> {
                 if (emailController.text.length > 3 &&
                     emailController.text.contains("@") &&
                     pswController.text.isNotEmpty &&
-                    userController.text.isNotEmpty) {
+                    userController.text.isNotEmpty &&
+                    smtpController.text.isNotEmpty &&
+                    portController.text.isNotEmpty) {
                   await saveAccount(emailController.text, pswController.text,
                       userController.text);
+                  await saveHostConfig(smtpController.text,
+                      int.tryParse(portController.text) ?? 0);
                   AlertUtils.showInfo("Account salvato correttamente");
                 } else {
                   AlertUtils.showError(
