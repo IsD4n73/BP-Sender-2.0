@@ -8,6 +8,7 @@ class AppConfig {
 
   static bool sendFile = true;
   static bool searchOggetto = true;
+  static bool useOutlookFallback = false;
 
   static String splitSymbol = "-";
   static String fileExtension = "pdf";

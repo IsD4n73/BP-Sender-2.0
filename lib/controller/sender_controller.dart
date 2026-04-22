@@ -1,11 +1,17 @@
 import 'dart:io';
-import 'package:enough_mail/enough_mail.dart';
+
 import 'package:buste_paga_sender/controller/files_controller.dart';
 import 'package:buste_paga_sender/controller/mail_list_controller.dart';
 import 'package:buste_paga_sender/page/sender.dart';
+
 import '../common/smtp_configuration.dart';
 import '../model/account_model.dart';
+import '../service/email/outlook_fallback_service.dart';
+import '../service/email/smtp_delivery_service.dart';
 import 'account_controller.dart';
+
+final SmtpDeliveryService _smtpDeliveryService = SmtpDeliveryService();
+final OutlookFallbackService _outlookFallbackService = OutlookFallbackService();
 
 Future<void> sendEmails(String dir) async {
   sendController.text = "";
@@ -56,91 +62,66 @@ Future<void> sendEmails(String dir) async {
 Future<bool> sendMail(
     String email, String oggetto, String nome, String dir, String file) async {
   AccountModel account = await getSavedAccount();
-  if (account.email != null && account.password != null) {
+  if (account.email != null &&
+      account.password != null &&
+      account.user != null &&
+      account.user!.isNotEmpty) {
     try {
-      final client = SmtpClient(
-        "3em.it",
-        isLogEnabled: true,
+      final host = await getSavedHost();
+      final port = await getSavedPort();
+      final filePath = "$dir\\$file";
+
+      final smtpResult = await _smtpDeliveryService.send(
+        account: account,
+        recipient: email,
+        subject: oggetto,
+        htmlBody: AppConfig.msg,
+        host: host,
+        port: port,
+        attachmentPath: filePath,
       );
 
-      var host = await getSavedHost();
-      var port = await getSavedPort();
-
-      await client.connectToServer(host, port, isSecure: true);
-      await client.ehlo();
-      if (client.serverInfo.supportsAuth(AuthMechanism.plain)) {
-        await client.authenticate(
-            account.user!, account.password!, AuthMechanism.plain);
-      } else if (client.serverInfo.supportsAuth(AuthMechanism.login)) {
-        await client.authenticate(
-            account.user!, account.password!, AuthMechanism.login);
-      } else {
-        return true;
+      if (smtpResult.isSuccess) {
+        logController.text += "[INVIO SMTP] ==> Email inviata a $email ($nome)\n";
+        sendController.text += "$nome\n";
+        return false;
       }
 
-      final builder = MessageBuilder.prepareMultipartAlternativeMessage(
-        plainText: AppConfig.msg,
-        htmlText: AppConfig.msg,
-      )
-        ..from = [MailAddress(null, account.email!)]
-        ..to = [MailAddress(null, email)]
-        ..subject = oggetto;
+      logController.text +=
+          "[ERRORE SMTP] ==> Email non inviata a $email ($nome). Dettagli: ${smtpResult.error}\n";
 
-      var fileExist = await File("$dir\\$file").exists();
-      if (fileExist && AppConfig.sendFile) {
-        await builder.addFile(
-            File("$dir\\$file"), MediaSubtype.applicationPdf.mediaType);
+      if (AppConfig.useOutlookFallback) {
+        final outlookResult = await _outlookFallbackService.sendViaOutlook(
+          recipient: email,
+          subject: oggetto,
+          htmlBody: AppConfig.msg,
+          attachmentPath: AppConfig.sendFile ? filePath : null,
+        );
+
+        if (outlookResult.isSent) {
+          logController.text +=
+              "[FALLBACK OUTLOOK] ==> Email inviata a $email ($nome). ${outlookResult.message}\n";
+          sendController.text += "$nome\n";
+          return false;
+        }
+
+        logController.text +=
+            "[ERRORE OUTLOOK] ==> Fallback Outlook non riuscito per $email ($nome). ${outlookResult.message}\n";
+        logController.text +=
+            "[INFO OUTLOOK] ==> Requisiti: Outlook desktop installato, profilo configurato e consenso di sicurezza se richiesto.\n";
       }
 
-      final mimeMessage = builder.buildMimeMessage();
-      final sendResponse = await client.sendMessage(mimeMessage);
-
-      logController.text += "[INVIO] ==> Email inviata a $email ($nome)\n";
-      sendController.text += "$nome\n";
-      return sendResponse.isFailedStatus;
-
-      /*List<Attachment>? attachmentFile;
-
-      if (await File("$dir\\$file").exists()) {
-        attachmentFile = [
-          FileAttachment(
-            File("$dir\\$file"),
-          )..location = Location.attachment,
-        ];
-      }
-
-
-      final message = Message()
-        ..from = Address(account.email!)
-        ..recipients.add(email)
-        ..subject = oggetto
-        ..html = AppConfig.msg;
-
-      if (attachmentFile != null && AppConfig.sendFile) {
-        message.attachments = attachmentFile;
-      }
-
-      await send(
-        message,
-        SmtpServer(
-          AppConfig.host,
-          password: account.password!,
-          username: account.user!,
-          port: AppConfig.port,
-          allowInsecure: true,
-          ignoreBadCertificate: true,
-        ),
-      );
-      logController.text += "[INVIO] ==> Email inviata a $email ($nome)\n";
-      sendController.text += "$nome\n";
-      return false;*/
+      return true;
     } catch (e) {
-      logController.text += "[ERRORE] ==> Email non inviata a $email ($nome)\n";
-      print(e);
+      logController.text +=
+          "[ERRORE] ==> Email non inviata a $email ($nome). Eccezione: $e\n";
       return true;
     }
   }
-  return false;
+
+  logController.text +=
+      "[ERRORE CONFIG] ==> Credenziali SMTP mancanti per inviare a $email ($nome)\n";
+  return true;
 }
 
 // create inviate folder

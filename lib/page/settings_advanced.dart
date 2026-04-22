@@ -20,6 +20,7 @@ class _SettingsAdvancedState extends State<SettingsAdvanced> {
   TextEditingController datiController = TextEditingController();
   bool sendFile = true;
   bool searchOggetto = true;
+  bool useOutlookFallback = false;
 
   List<String> listData = ["nome", "oggetto"];
 
@@ -34,6 +35,7 @@ class _SettingsAdvancedState extends State<SettingsAdvanced> {
         extensionController.text = AppConfig.fileExtension;
         sendFile = AppConfig.sendFile;
         searchOggetto = AppConfig.searchOggetto;
+        useOutlookFallback = AppConfig.useOutlookFallback;
 
         listData = generateExampleList();
       });
@@ -58,6 +60,20 @@ class _SettingsAdvancedState extends State<SettingsAdvanced> {
               await saveSendFile(newValue!);
               setState(() {
                 sendFile = newValue;
+              });
+            },
+            activeColor: const Color(0xff2B6AF7),
+          ),
+          const SizedBox(height: 10),
+          CheckboxListTile(
+            title: const Text("Fallback Outlook (Windows)"),
+            subtitle: const Text(
+                "Se SMTP fallisce invia in background via Outlook (richiede Outlook desktop già configurato)"),
+            value: useOutlookFallback,
+            onChanged: (newValue) async {
+              await saveOutlookFallback(newValue!);
+              setState(() {
+                useOutlookFallback = newValue;
               });
             },
             activeColor: const Color(0xff2B6AF7),

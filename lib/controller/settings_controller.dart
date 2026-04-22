@@ -42,6 +42,8 @@ Future<void> getSavedAdvanced() async {
   AppConfig.sendFile = prefs.getBool('bp-sendFile') ?? AppConfig.sendFile;
   AppConfig.searchOggetto =
       prefs.getBool('bp-searchOggetto') ?? AppConfig.searchOggetto;
+  AppConfig.useOutlookFallback =
+      prefs.getBool('bp-outlookFallback') ?? AppConfig.useOutlookFallback;
 }
 
 // get the saved mail text
@@ -129,6 +131,14 @@ Future<void> saveSendFile(bool file) async {
 Future<void> saveSearchOggetto(bool obj) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.setBool('bp-searchOggetto', obj);
+  await getSavedAdvanced();
+}
+
+
+// save outlook fallback
+Future<void> saveOutlookFallback(bool enabled) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setBool('bp-outlookFallback', enabled);
   await getSavedAdvanced();
 }
 
